@@ -1,0 +1,31 @@
+<form>
+    <div class="grid grid-cols-[1fr_3fr] grid-rows-5 items-center gap-4">
+
+        <label for="username">Имя пользователя</label>
+        <input pInputText id="username" [control]="userForm.fullname"/>
+
+        <label for="login">Логин</label>
+        <input pInputText id="login" [control]="userForm.login"/>
+
+        <label for="username">Пароль</label>
+        <input pInputText id="password" type="password" [control]="userForm.password"/>
+
+        <label for="confirmation">Проверка пароля</label>
+        <input pInputText id="confirmation" type="password"  [control]="userForm.confirmation"/>
+
+        <label for="role">Роль</label>
+        <role-selector [items]="roles" [control]="userForm.role"/>
+
+    </div>
+</form>
+<div class="h-20 pt-10">
+    Для смены пароля заполните поля <span class="font-bold"> Пароль</span> и <span class="font-bold">Подтверждение
+    </span>
+</div>
+<div class="flex justify-end">
+
+    <p-button label="Сохранить" severity="success" size="small" (click)="ok()" [loading]="isSaving()"/>
+    <span class="w-2"></span>
+    <p-button label="Отмена" severity="danger" size="small" (click)="cancel()" [disabled]="isSaving()"/>
+
+</div>

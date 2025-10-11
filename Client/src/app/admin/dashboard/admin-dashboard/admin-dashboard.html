@@ -1,0 +1,10 @@
+<div class="flex dark:bg-surface-900 h-full">
+    <p-toast/>
+    <dashboard-sidebar [class.-ml-80]="!showSidepanel()" class="transition-all duration-500" [items]="items()"></dashboard-sidebar>
+    <div class="flex flex-col h-full grow-1">
+        <dashboard-header (hideSidebar)="hide()"></dashboard-header>
+        <div class="h-[calc(100vh-5rem)] overflow-auto">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

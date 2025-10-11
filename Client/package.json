@@ -1,0 +1,64 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "serve:ssr:Client": "node dist/Client/server/server.mjs"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^21.0.0-next.7",
+    "@angular/compiler": "^21.0.0-next.7",
+    "@angular/core": "^21.0.0-next.7",
+    "@angular/forms": "^21.0.0-next.7",
+    "@angular/platform-browser": "^21.0.0-next.7",
+    "@angular/platform-server": "^21.0.0-next.7",
+    "@angular/router": "^21.0.0-next.7",
+    "@angular/ssr": "^21.0.0-next.7",
+    "@larscom/ngrx-signals-storage": "^4.0.2",
+    "@ngrx/signals": "^20.0.1",
+    "@primeuix/themes": "^1.2.5",
+    "@tailwindcss/postcss": "^4.1.14",
+    "express": "^5.1.0",
+    "postcss": "^8.5.6",
+    "primeicons": "^7.0.0",
+    "primeng": "^20.2.0",
+    "quill": "^2.0.3",
+    "rxjs": "~7.8.0",
+    "tailwindcss": "^4.1.14",
+    "tailwindcss-primeui": "^0.6.1",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.0.0-next.7",
+    "@angular/cli": "^21.0.0-next.7",
+    "@angular/compiler-cli": "^21.0.0-next.7",
+    "@types/express": "^5.0.1",
+    "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.17.19",
+    "jasmine-core": "~5.9.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "postcss": "^8.5.3",
+    "typescript": "~5.9.2"
+  }
+}

@@ -1,0 +1,28 @@
+<p-menu #questmenu [model]="menuItems" [popup]="true" />
+<p-confirmdialog />
+<div class="flex flex-col p-2 h-full">
+    <div class="flex items-center gap-3 pb-2 border-b  border-b-primary-600">
+        <span>Категория</span>
+        <p-select [options]="store.categoriesEntities()" optionLabel="title" optionValue="id" class="w-100"
+            [(ngModel)]="selectedCategory" />
+    </div>
+    <div class="flex py-2 border-b border-b-primary-600">
+        <p-button label="Добавить" icon="pi pi-plus" (click)="newQuestion()" size="small" [disabled]="!selectedCategory()"></p-button>
+    </div>
+    <div class="pt-2 h-[calc(100%-104px)] ">
+        <p-table [value]="questions()" stripedRows class="h-full overflow-auto" [scrollable]="true"
+            scrollHeight="100%" [size]="'small'">
+
+            <ng-template #body let-question>
+                <tr>
+                    <td>
+                        <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" (click)="menuClick($event, question)"/>
+                    </td>
+                    <td class="q-row">
+                        {{ question.content | removeTags}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

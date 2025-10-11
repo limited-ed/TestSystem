@@ -1,0 +1,55 @@
+<div class="w-full">
+    <div class=" h-screen dark:bg-surface-950 px-6 grid place-content-center login_back">
+        <div
+            class="grid grid-cols-2 gap-4 w-200 bg-surface-0 dark:bg-surface-900 p-8 md:p-12 shadow-sm rounded-2xl items-center">
+            <div class="my-10">
+                <form (ngSubmit)="login()">
+                    <div class="mx-auto flex flex-col gap-8 ">
+
+                        <div class="flex flex-col gap-6 w-full">
+                            <div class="flex flex-col gap-2 w-full">
+                                <label for="username"
+                                    class="text-surface-900 dark:text-surface-0 font-medium leading-normal">Имя
+                                    пользователя</label>
+                                <input pInputText id="username" type="text" placeholder="Имя пользователя"
+                                    class="w-full px-3 py-2 shadow-sm rounded-lg" [control]="loginForm.username"
+                                    (keydown.enter)="login()" />
+                            </div>
+                            <div class="flex flex-col gap-2 w-full">
+                                <label for="password"
+                                    class="text-surface-900 dark:text-surface-0 font-medium leading-normal">Пароль</label>
+                                <input pInputText id="password" type="password" placeholder="Пароль"
+                                    class="w-full px-3 py-2 shadow-sm rounded-lg" [control]="loginForm.password"
+                                    (keydown.enter)="login()" />
+                            </div>
+                        </div>
+                        <button pButton type="button"
+                            class="w-full py-2 rounded-lg flex justify-center items-center gap-2" (click)="login()"
+                            [disabled]="!loginForm().valid()">
+                            <i pButtonIcon class="pi pi-user text-base! leading-normal!"></i>
+                            <span pButtonLabel>Войти</span>
+                        </button>
+                        <div class="h-8 flex justify-center">
+                            @if(error()!==''){
+
+                            @if (error()==='server') {<span class="text-red-800">Ошибка подключения</span>}
+                            @if (error()==='password') {<span class="text-red-800">Неверный логин или пароль</span>}
+
+                            }
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="flex flex-col justify-center items-center gap-4">
+                <div
+                    class="text-surface-900 dark:text-surface-0 text-2xl font-semibold leading-tight text-center w-full">
+                    Добро пожаловать</div>
+                <img src="/logo.png" alt="Login Illustration"  class="rounded-4xl" />
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

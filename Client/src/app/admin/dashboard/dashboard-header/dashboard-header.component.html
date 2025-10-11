@@ -1,0 +1,25 @@
+<div class="h-20  w-full flex items-center justify-between p-4 border-b-2 border-primary-700 bg-white dark:bg-gray-800">
+    <div class="">
+        <p-button icon="pi pi-bars" [rounded]="true" variant="text" severity="secondary" (onClick)="hide()" />
+
+    </div>
+    <div class="flex items-center">
+
+        <div >
+
+
+            <p-splitbutton text severity="secondary" [model]="avatarItems">
+                <ng-template #content>
+                    <p-overlaybadge severity="danger">
+                        <p-avatar image="/user.png" size="large" shape="circle" [style.height]="'auto'" />
+                    </p-overlaybadge>
+
+                    <span>{{userInfo()?.fullname }}</span>
+                </ng-template>
+            </p-splitbutton>
+
+
+        </div>
+
+
+    </div>

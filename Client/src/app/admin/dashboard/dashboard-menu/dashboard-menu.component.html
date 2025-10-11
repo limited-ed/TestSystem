@@ -1,0 +1,46 @@
+<div class="flex-col px-4">
+
+    @for(item of items(); track item.label) {
+    <div class="border-b border-gray-600 w-full py-2 relative ">
+        @if ( item.header) {
+
+        <button (click)="item.opened=!item.opened"
+            class="focus:outline-none text-left text-primary-800 dark:text-white flex justify-between items-center w-full py-1 space-x-14  ">
+            <div class="font-bold text-md uppercase flex items-center">
+                @if (typeof(item.icon) !=='undefined' && item.icon.length>0){
+                <span class="mr-2 pi" [class]="item.icon" style="font-size: 1.5rem !important"></span>
+                }
+                <p class="leading-6 text-xs">{{item.label}}</p>
+            </div>
+            <svg id="icon1" [class.rotate-180]="!item.opened" class="transform duration-200 transition-all" width="24"
+                height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 15L12 9L6 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+        <div [class]="!item.opened?'max-h-0':'max-h-100'" class="transition-all duration-200 overflow-hidden">
+            <ng-container *ngTemplateOutlet="groupTemplate; context: {$implicit: item.items}"></ng-container>
+        </div>
+        }
+        @else {
+        <ng-container *ngTemplateOutlet="menuButton; context: {$implicit:item}"></ng-container>
+        }
+
+    </div>
+    }
+</div>
+
+<ng-template #groupTemplate let-items>
+    @for(item of items; track item.label) {
+    <ng-container *ngTemplateOutlet="menuButton; context: {$implicit:item}"></ng-container>
+    }
+</ng-template>
+
+<ng-template #menuButton let-item>
+    <a [routerLink]="item.routerLink" [routerLinkActive]="'before:visible'"
+        class=" relative flex justify-start items-center gap-2 hover:bg-gray-200 text-gray-800 dark:text-gray-300 dark:hover:bg-surface-900
+        before:absolute before:invisible hover:before:visible before:bg-primary-700  before:h-full before:-translate-x-3 before:w-[4px] rounded px-3 py-2  w-full">
+        <span class="pi" [class]="item.icon"></span>
+        <p class="text-sm">{{item.label}}</p>
+    </a>
+</ng-template>
