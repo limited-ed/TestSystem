@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { DashboardHeaderComponent, DashboardSidebarComponent } from 'admin';
+import { DashboardHeaderComponent, DashboardSidebarComponent } from 'admin/dashboard';
 import { MenuItem } from 'models';
 import { catchError, forkJoin, tap } from 'rxjs';
 import { CategoryService, GroupService, UserService } from 'services';
@@ -8,6 +8,7 @@ import { AdministratorStore, ApplicationStore } from 'state';
 import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { QuestionService } from 'services/question-service/question-service';
+import { TestService } from 'services/test-service/test-service';
 
 
 @Component({
@@ -27,6 +28,9 @@ export class AdminDashboard implements OnInit {
   groupSrv = inject(GroupService);
   categoriesSrv = inject(CategoryService);
   questionSrv = inject(QuestionService);
+  testSrv = inject(TestService);
+
+  msgSrv = inject(MessageService);
 
   showSidepanel = signal(true);
 
@@ -59,7 +63,7 @@ export class AdminDashboard implements OnInit {
           items: [
             {
               label: "Категории вопросов",
-              icon:"pi pi-list",
+              icon: "pi pi-list",
               routerLink: "/admin/categories"
             },
             {
@@ -70,14 +74,23 @@ export class AdminDashboard implements OnInit {
             {
               label: 'Редактор тестов',
               icon: 'pi-file-edit',
-              routerLink: '/admin/tests'
-            },            
-
+              routerLink: '/admin/tests/list'
+            },
+          ]
+        },
+        {
+          label: 'Результаты и отчеты',
+          header: true,
+          opened: true,
+          icon: 'pi pi-chart-bar',
+          routerLink: '/admin/results',
+          items: [
+            { label: 'Просмотр результатов', icon: "pi pi-list-check", routerLink: '/admin/results' }
           ]
         }
-      ] 
+      ]
     }
-    else { 
+    else {
       return [
         {
           label: 'Пользователи и группы',
@@ -99,13 +112,20 @@ export class AdminDashboard implements OnInit {
           icon: 'pi-file',
           items: [
             {
+              label: "Категории вопросов",
+              icon: "pi pi-list",
+              routerLink: "/admin/categories"
+            },
+            {
               label: 'Редактор вопросов',
               icon: 'pi-question',
+              routerLink: '/admin/questions'
             },
             {
               label: 'Редактор тестов',
               icon: 'pi-file-edit',
-            }
+              routerLink: '/admin/tests/list'
+            },
           ]
         },
         {
@@ -115,9 +135,9 @@ export class AdminDashboard implements OnInit {
           icon: 'pi pi-chart-bar',
           routerLink: '/admin/results',
           items: [
-              { label: 'Просмотр результатов', icon:"pi pi-list-check"}
-            ]
-          
+            { label: 'Просмотр результатов', icon: "pi pi-list-check" }
+          ]
+
         }
       ]
     }
@@ -126,19 +146,23 @@ export class AdminDashboard implements OnInit {
 
   ngOnInit(): void {
     let a = 1;
-    forkJoin([
-      this.userSrv.get(), 
-      this.groupSrv.get(),
-      this.categoriesSrv.get(),  
-      this.questionSrv.get() 
-    ]).subscribe({
+    forkJoin({
+      users: this.userSrv.get(),
+      groups: this.groupSrv.get(),
+      categories: this.categoriesSrv.get(),
+      questions: this.questionSrv.get(),
+      tests: this.testSrv.get()
+    }).subscribe({
       next: next => {
-        this.store.updateAllUsers(next[0]),
-        this.store.updateAllGroups(next[1]),
-        this.store.updateAllCategories(next[2]),
-        this.store.updateAllQuestions(next[3])
+        this.store.updateAllUsers(next.users),
+          this.store.updateAllGroups(next.groups),
+          this.store.updateAllCategories(next.categories),
+          this.store.updateAllQuestions(next.questions),
+          this.store.updateAllTests(next.tests)
       },
-      error: error => { },
+      error: error => {
+        this.msgSrv.add({ severity: 'error', summary: 'Ошибка', detail: 'Ошибка при загрузке данных', sticky: true });
+      },
       complete: () => { }
     });
   }

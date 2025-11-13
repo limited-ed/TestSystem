@@ -3,7 +3,7 @@ import { form, required, validate, customError, Control } from '@angular/forms/s
 import { RoleSelector } from 'admin/selector/selector';
 import { User } from 'models';
 import { ButtonModule } from 'primeng/button';
-import { DialogService, DynamicDialogComponent, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialog, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 
@@ -42,7 +42,7 @@ export class UserEdit {
 
   ref = inject(DynamicDialogRef);
   dialogService = inject(DialogService);
-  dialog: DynamicDialogComponent | undefined;
+  dialog: DynamicDialog | undefined;
 
   constructor() {
     this.dialog = this.dialogService.getInstance(this.ref);

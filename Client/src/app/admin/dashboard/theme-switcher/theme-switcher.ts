@@ -10,9 +10,10 @@ import Nora from '@primeuix/themes/nora';
 import { PrimeNG } from 'primeng/config';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { StyleClassModule } from 'primeng/styleclass';
-import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { ApplicationStore } from 'state';
 
 const presets = {
   Aura,
@@ -32,73 +33,13 @@ export interface ThemeState {
   selector: 'theme-switcher',
   standalone: true,
   imports: [CommonModule, FormsModule, StyleClassModule, SelectButtonModule, ToggleSwitchModule, ButtonModule],
-  template: ` <div class="card flex justify-end items-center gap-4 p-2">
-
-               <p-toggleswitch  />
-
-            <div class="relative">
-                <button 
-                    pStyleClass="@next"
-                    enterFromClass="hidden"
-                    enterActiveClass="animate-scalein"
-                    leaveToClass="hidden"
-                    leaveActiveClass="animate-fadeout"
-                    [hideOnOutsideClick]="true"
-                    type="button"
-                    class="w-8 h-8 p-0 surface-0 dark:surface-800 border border-surface-200 dark:border-surface-600 rounded"
-                >
-                    <i class="pi pi-palette"></i>
-                </button>
-                <div class="absolute top-[2.5rem] right-0 hidden  p-3 bg-white dark:bg-surface-800 rounded-md shadow border border-surface-200 dark:border-surface-700 flex-col justify-start items-start gap-3.5 origin-top z-10">
-                    <div class="flex-col justify-start items-start gap-2 inline-flex pr-4">
-                        <span class="text-sm font-medium">Основные цвета</span>
-                        <div class="self-stretch justify-start items-start gap-2 inline-flex flex-wrap">
-                            @for (primaryColor of primaryColors(); track primaryColor.name) {
-                                <button
-                                    type="button"
-                                    [title]="primaryColor.name"
-                                    (click)="updateColors($event, 'primary', primaryColor)"
-                                    class="outline outline-2 outline-offset-1 outline-transparent cursor-pointer p-0 rounded-[50%] w-5 h-5"
-                                    [ngStyle]="{
-                                        'background-color': getPalette500(primaryColor.palette),
-                                        'outline-color': selectedPrimaryColor() === primaryColor.name ? 'var(--p-primary-color)' : ''
-                                    }"
-                                ></button>
-                            }
-                        </div>
-                    </div>
-                    <div class="flex-col justify-start items-start gap-2 inline-flex pr-2 mt-4">
-                        <span class="text-sm font-medium">Вторицный цвет</span>
-                        <div class="self-stretch justify-start items-start gap-2 inline-flex">
-                            @for (surface of surfaces; track surface.name) {
-                                <button
-                                    type="button"
-                                    [title]="surface.name"
-                                    (click)="updateColors($event, 'surface', surface)"
-                                    class="outline outline-2 outline-offset-1 outline-transparent cursor-pointer p-0 rounded-[50%] w-5 h-5"
-                                    [ngStyle]="{
-                                        'background-color': surface.palette['500'],
-                                        'outline-color': selectedSurfaceColor() === surface.name ? 'var(--p-primary-color)' : ''
-                                    }"
-                                ></button>
-                            }
-                        </div>
-                    </div>
-                    <div class="flex-col justify-start items-start gap-2 inline-flex w-full mt-4">
-                        <span class="text-sm font-medium">Ghtctn</span>
-                        <div class="inline-flex p-[0.28rem] items-start gap-[0.28rem] rounded-[0.71rem] border border-[#00000003] w-full">
-                            <p-selectbutton [options]="presets" [ngModel]="selectedPreset()" (ngModelChange)="onPresetChange($event)" [unselectable]="false" size="small" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-    </div>`
+  templateUrl: './theme-switcher.html'
 })
 export class ThemeSwitcher {
   private readonly STORAGE_KEY = 'themeSwitcherState';
 
   document = inject(DOCUMENT);
+  store = inject(ApplicationStore);
 
   iconClass = computed(() =>
     this.themeState().darkTheme ? 'pi-sun' : 'pi-moon'
@@ -110,7 +51,9 @@ export class ThemeSwitcher {
 
   config: PrimeNG = inject(PrimeNG);
 
-  themeState = signal<ThemeState>({ preset: 'Aura', primary: 'noir', surface: 'neutral', darkTheme: false });
+  themeState = this.store.theme
+
+  
 
   theme = computed(() => (this.themeState()?.darkTheme ? 'dark' : 'light'));
 
@@ -123,7 +66,6 @@ export class ThemeSwitcher {
   });
 
   constructor() {
-    this.themeState.set({ ...this.loadthemeState() });
 
     effect(() => {
       const state = this.themeState();
@@ -152,7 +94,7 @@ export class ThemeSwitcher {
   primaryColors = computed(() => {
     //@ts-ignore
     const presetPalette = presets[this.themeState().preset].primitive;
-    const colors = [
+    const colors = [     
       'emerald',
       'green',
       'lime',
@@ -170,7 +112,7 @@ export class ThemeSwitcher {
       'pink',
       'rose',
     ];
-    const palettes = [{ name: 'noir', palette: {} }];
+    const palettes = [{ name: 'neutral', palette: presetPalette['neutral'] }];
 
     colors.forEach((color) => {
       palettes.push({
@@ -323,11 +265,8 @@ export class ThemeSwitcher {
 
   enableDark(event: any) {
     setTimeout(() => {
-      this.themeState.update((state) => ({
-        ...state,
-        darkTheme: event.target.checked,
-      }));
-    }, 150);
+      this.store.updateTheme({ ...this.themeState(), darkTheme: event.checked }), 150
+    });
   }
 
   getPresetExt() {
@@ -538,9 +477,9 @@ export class ThemeSwitcher {
 
   updateColors(event: any, type: string, color: any) {
     if (type === 'primary') {
-      this.themeState.update((state) => ({ ...state, primary: color.name }));
+      this.store.updateTheme({ ...this.themeState(), primary: color.name });
     } else if (type === 'surface') {
-      this.themeState.update((state) => ({ ...state, surface: color.name }));
+      this.store.updateTheme({ ...this.themeState(), surface: color.name });
     }
     this.applyTheme(type, color);
 
@@ -556,7 +495,7 @@ export class ThemeSwitcher {
   }
 
   onPresetChange(event: any) {
-    this.themeState.update((state) => ({ ...state, preset: event }));
+    this.store.updateTheme({ ...this.themeState(), preset: event });
     //@ts-ignore
     const preset = presets[event];
     const surfacePalette = this.surfaces.find(

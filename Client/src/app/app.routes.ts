@@ -11,9 +11,15 @@ export const routes: Routes = [
         path: "admin", canActivate: [canActivateAdmin], loadComponent: () => import('admin/dashboard/admin-dashboard/admin-dashboard').then(c => c.AdminDashboard), children: [
             { path: 'users', loadComponent: () => import('admin/user/users-list/users-list').then(c => c.UsersList) },
             { path: 'groups', loadComponent: () => import('admin/group-edit/group-edit').then(c => c.GroupEdit) },
-            { path: 'tests', loadComponent: () => import('admin/test-list/test-list').then(c => c.TestList) },
             { path: 'categories', loadComponent: () => import('admin/category/categories-list/categories-list').then(c => c.CategoriesList) },
-            { path: 'questions', loadComponent: () => import('admin/question/question-list/question-list').then(c => c.QuestionList), pathMatch: 'full' }
+            { path: 'questions', loadComponent: () => import('admin/question/question-list/question-list').then(c => c.QuestionList), pathMatch: 'full' },
+            {
+                path: 'tests', children: [
+                    { path: 'list', loadComponent: () => import('admin/test/tests-list/tests-list').then(c => c.TestsList) },
+                    { path: 'view/:id', loadComponent: () => import('admin/test/test-view/test-view').then(c => c.TestView) }
+                ]
+            },
+            { path: 'results', loadComponent: () => import('admin/result/results-list/results-list').then(c => c.ResultsList) }
 
         ]
     },

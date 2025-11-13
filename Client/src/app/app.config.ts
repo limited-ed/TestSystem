@@ -24,7 +24,8 @@ export const ApiConfiguration = {
     groups: '/api/group/',
     users: '/api/user/',
     questions: '/api/question/',
-    cource: '/api/cource/'
+    cource: '/api/cource/',
+    test: '/api/test/'
   },
   apiHost: environment.apiServer
 }

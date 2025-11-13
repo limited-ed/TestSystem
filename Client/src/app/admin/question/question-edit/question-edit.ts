@@ -17,7 +17,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { Router } from '@angular/router';
-import { DialogService, DynamicDialogComponent, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialog, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-question-edit',
@@ -37,7 +37,7 @@ export class QuestionEdit {
 
   ref = inject(DynamicDialogRef);
   dialogService = inject(DialogService);
-  dialog: DynamicDialogComponent | undefined;
+  dialog: DynamicDialog | undefined;
 
   editQuestion = linkedSignal(
     () => {

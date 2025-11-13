@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';  
 import { MenuItem } from 'models';
-import { DashboardMenuComponent } from "admin";
+import { DashboardMenuComponent } from "admin/dashboard";
 
  
 @Component({

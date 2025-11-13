@@ -1,0 +1,33 @@
+<div class="flex flex-col p-2 h-full">
+    <div class="flex gap-4">
+        <p-button label="Отмена" icon="pi pi-arrow-left" size="small" (click)="cancel()" variant="outlined"
+            severity="danger"></p-button>
+        <p-button label="Сохранить" icon="pi pi-check" size="small" severity="secondary"></p-button>
+
+    </div>
+    <div class="pt-2 h-[calc(100%-104px)] ">
+        <p-tabs value="1">
+            <p-tablist>
+                <p-tab value="1">Тест</p-tab>
+                <p-tab value="2">Группы</p-tab>
+            </p-tablist>
+            <p-tabpanels class="h-50">
+                <p-tabpanel value="1">
+                    <div class="flex flex-col">
+                        <div class="grid grid-cols-[1fr_3fr] grid-rows-2 items-center gap-4">
+
+                            <label for="title">Название теста </label>
+                            <input pInputText id="title"  />
+
+                            <label for="timer">Время теста(мин, 0 - время откл.)</label>
+                            <p-inputnumber [showButtons]="true" [min]="0" [max]="180" inputId="timer"/>
+  
+                        </div>
+                    </div>
+               </p-tabpanel>
+                <p-tabpanel value="2">2</p-tabpanel>
+
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>

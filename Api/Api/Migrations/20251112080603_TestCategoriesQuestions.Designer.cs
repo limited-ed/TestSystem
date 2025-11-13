@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251030235014_TestCategoriesQuestions")]
+    [Migration("20251112080603_TestCategoriesQuestions")]
     partial class TestCategoriesQuestions
     {
         /// <inheritdoc />
@@ -126,6 +126,9 @@ namespace Api.Migrations
 
                     b.Property<int>("Timer")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");

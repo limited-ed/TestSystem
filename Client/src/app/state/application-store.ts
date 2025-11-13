@@ -39,6 +39,9 @@ export class ApplicationStore extends signalStore(
         },
         updateUser(newUser: UserInfo | undefined) {
             patchState(store, { user: newUser });
+        },
+        updateTheme(newTheme: ThemeState) {
+            patchState(store, {theme: newTheme})
         }
     })),
     withStorage('applicationStorage', () => sessionStorage)

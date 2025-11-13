@@ -3,7 +3,7 @@ import { inject } from '@angular/core/primitives/di';
 import { Control, form, required } from '@angular/forms/signals';
 import { Category } from 'models';
 import { ButtonModule } from 'primeng/button';
-import { DialogService, DynamicDialogComponent, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialog, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 
@@ -26,7 +26,7 @@ export class CategoryEdit {
   });
 
 
-  dialog: DynamicDialogComponent | undefined;
+  dialog: DynamicDialog | undefined;
 
 
   constructor(private ref: DynamicDialogRef, private dialogService: DialogService) {

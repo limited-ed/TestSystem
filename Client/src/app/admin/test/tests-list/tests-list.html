@@ -1,0 +1,22 @@
+<p-menu #testmenu [model]="menuItems" [popup]="true" />
+<div class="flex flex-col p-2 h-full">
+    <div class="flex py-2 border-b border-b-primary-600">
+        <p-button label="Добавить" icon="pi pi-plus" (click)="newTest()" size="small" [disabled]="!selectedTest()"></p-button>
+    </div>
+    <div class="pt-2 h-[calc(100%-104px)] ">
+        <p-table [value]="store.testsEntities()" stripedRows class="h-full overflow-auto" [scrollable]="true"
+            scrollHeight="100%" [size]="'small'">
+
+            <ng-template #body let-test>
+                <tr>
+                    <td class="w-10">
+                        <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" (click)="showMenu($event, test)"/>
+                    </td>
+                    <td >
+                        {{ test.title}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

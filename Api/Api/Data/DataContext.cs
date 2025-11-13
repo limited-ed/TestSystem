@@ -102,5 +102,22 @@ public class DataContext : DbContext
             }
             await SaveChangesAsync();
         }
+
+        if (!Tests.Any())
+        {
+            Tests.Add(new()
+            {
+                UserId = 1,
+                Title = "Тест для проверки",
+                Timer = 15,
+                Parts = new()
+                {
+                    new() {CategoryId = 1, Count = 5},
+                    new() {CategoryId = 2, Count = 5},
+                    new() {CategoryId = 3, Count = 5},
+                }
+            });
+            await SaveChangesAsync();
+        }
     }
 }

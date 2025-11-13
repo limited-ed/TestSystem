@@ -13,7 +13,7 @@ import { MenuItem } from 'primeng/api';
 import { ApplicationStore } from 'state/application-store';
 
  
-import { ThemeSwitcher } from 'theme-switcher/theme-switcher';
+import { ThemeSwitcher } from 'admin/dashboard/theme-switcher/theme-switcher';
 
 
 

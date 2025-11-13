@@ -124,6 +124,9 @@ namespace Api.Migrations
                     b.Property<int>("Timer")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
