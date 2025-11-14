@@ -9,7 +9,7 @@ import { AdministratorStore } from 'state';
 
 @Component({
   selector: 'app-tests-list',
-  imports:  [ButtonModule, TableModule, MenuModule, ],
+  imports: [ButtonModule, TableModule, MenuModule,],
   templateUrl: './tests-list.html',
   styleUrl: './tests-list.css'
 })
@@ -17,7 +17,7 @@ export class TestsList {
 
 
   store = inject(AdministratorStore);
-  router= inject(Router);
+  router = inject(Router);
 
   selectedTest = model<Test>();
 
@@ -41,8 +41,7 @@ export class TestsList {
   menu = viewChild<Menu>("testmenu");
 
   newTest() {
-    
-    throw new Error('Method not implemented.');
+    this.router.navigate(['/admin/tests/new'])
   }
 
   editTest() {
@@ -53,7 +52,7 @@ export class TestsList {
     throw new Error('Method not implemented.');
   }
 
-  showMenu(event: any, test: Test){
+  showMenu(event: any, test: Test) {
     this.selectedTest.set(test);
     this.menu()?.toggle(event);
   }

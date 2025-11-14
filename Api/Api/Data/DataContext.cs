@@ -113,8 +113,7 @@ public class DataContext : DbContext
                 Parts = new()
                 {
                     new() {CategoryId = 1, Count = 5},
-                    new() {CategoryId = 2, Count = 5},
-                    new() {CategoryId = 3, Count = 5},
+
                 }
             });
             await SaveChangesAsync();

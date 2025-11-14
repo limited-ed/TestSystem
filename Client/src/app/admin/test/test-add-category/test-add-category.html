@@ -1,0 +1,15 @@
+<div class="grid grid-cols-[1fr_3fr] grid-rows-2 items-center gap-4">
+
+    <label for="category">Роль</label>
+    <p-select [options]="categories()" id="category" optionLabel="title" optionValue="id" [(ngModel)]="editPart().categoryId"
+        />
+
+    <label for="timer">Время теста(мин, 0 - время откл.)</label>
+    <p-inputnumber [(ngModel)]="editPart().count" [min]="1" id="timer"/>
+
+
+</div>
+<div class="flex justify-end pt-30 gap-2">
+        <p-button label="Сохранить" severity="secondary" size="small" (click)="ok()" />
+        <p-button label="Отмена" severity="danger" size="small" (click)="cancel()"  variant="outlined"/>
+</div>

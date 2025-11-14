@@ -16,7 +16,9 @@ export const routes: Routes = [
             {
                 path: 'tests', children: [
                     { path: 'list', loadComponent: () => import('admin/test/tests-list/tests-list').then(c => c.TestsList) },
-                    { path: 'view/:id', loadComponent: () => import('admin/test/test-view/test-view').then(c => c.TestView) }
+                    { path: 'view/:id', loadComponent: () => import('admin/test/test-view/test-view').then(c => c.TestView) },
+                    { path: 'new', loadComponent: () => import('admin/test/test-view/test-view').then(c => c.TestView) },
+
                 ]
             },
             { path: 'results', loadComponent: () => import('admin/result/results-list/results-list').then(c => c.ResultsList) }

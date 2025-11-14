@@ -9,6 +9,7 @@ import { Toast } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { QuestionService } from 'services/question-service/question-service';
 import { TestService } from 'services/test-service/test-service';
+import { MessageBus } from 'core/message-bus/message-bus';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class AdminDashboard implements OnInit {
   testSrv = inject(TestService);
 
   msgSrv = inject(MessageService);
+  msgBus = inject(MessageBus);
 
   showSidepanel = signal(true);
 
@@ -143,6 +145,14 @@ export class AdminDashboard implements OnInit {
     }
   }
   );
+
+  constructor(){
+    this.msgBus.on().subscribe({
+      next: (message) => {
+        this.msgSrv.add(message);
+      }
+    });
+  }
 
   ngOnInit(): void {
     let a = 1;
