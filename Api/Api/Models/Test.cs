@@ -9,7 +9,7 @@ public class Test
     public string Title { get; set; }
     public List<TestPart> Parts { get; set; }   
     public int Timer { get; set; }
-    public ICollection<Group> Groups { get; set; }
+    public ICollection<GroupTest> GroupTests { get; set; }
     public int UserId { get; set; }
     [JsonIgnore]
     public User User { get; set; }

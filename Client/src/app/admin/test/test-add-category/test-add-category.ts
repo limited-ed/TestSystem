@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { error } from 'console';
 import { Category, TestPart } from 'models';
@@ -35,9 +35,12 @@ export class TestAddCategory {
   dialogService = inject(DialogService);
   dialog: DynamicDialog | undefined;
 
+
   constructor() {
     this.dialog = this.dialogService.getInstance(this.ref);
   }
+
+
 
   ok() {
     this.dialog?.data.save(this.editPart()).subscribe({

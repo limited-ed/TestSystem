@@ -21,7 +21,7 @@ namespace Api.Controllers
                 var userId = ClaimUtils.GetClaimAsInt(User.Claims, "userId");
                 return Json(await repository.GetForUser(userId));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -42,7 +42,7 @@ namespace Api.Controllers
                 var cat = await repository.AddCategory(category, userId);
                 return Created(@"\api\categories", cat);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -57,7 +57,7 @@ namespace Api.Controllers
                 
                 return Ok(await repository.UpdateCategory(category,userId));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }
@@ -72,7 +72,7 @@ namespace Api.Controllers
                 await repository.DeleteCategory(id, userId);
                 return Ok();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest();
             }

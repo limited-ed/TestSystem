@@ -77,6 +77,23 @@ namespace Api.Migrations
                     b.ToTable("Groups");
                 });
 
+            modelBuilder.Entity("Api.Models.GroupTest", b =>
+                {
+                    b.Property<int>("TestId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TestId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.HasIndex("TestId", "GroupId");
+
+                    b.ToTable("GroupsTests");
+                });
+
             modelBuilder.Entity("Api.Models.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -161,21 +178,6 @@ namespace Api.Migrations
                     b.ToTable("TestParts");
                 });
 
-            modelBuilder.Entity("GroupTest", b =>
-                {
-                    b.Property<int>("GroupsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("TestsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("GroupsId", "TestsId");
-
-                    b.HasIndex("TestsId");
-
-                    b.ToTable("GroupTest");
-                });
-
             modelBuilder.Entity("User", b =>
                 {
                     b.Property<int>("Id")
@@ -204,8 +206,7 @@ namespace Api.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("Id", "Login")
-                        .IsUnique();
+                    b.HasIndex("Id", "Login");
 
                     b.ToTable("Users");
                 });
@@ -230,6 +231,25 @@ namespace Api.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Api.Models.GroupTest", b =>
+                {
+                    b.HasOne("Api.Models.Group", "Group")
+                        .WithMany("GroupTests")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Api.Models.Test", "Test")
+                        .WithMany("GroupTests")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Api.Models.Question", b =>
@@ -279,21 +299,6 @@ namespace Api.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("GroupTest", b =>
-                {
-                    b.HasOne("Api.Models.Group", null)
-                        .WithMany()
-                        .HasForeignKey("GroupsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Api.Models.Test", null)
-                        .WithMany()
-                        .HasForeignKey("TestsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("User", b =>
                 {
                     b.HasOne("Api.Models.Group", "Group")
@@ -310,6 +315,11 @@ namespace Api.Migrations
                     b.Navigation("Questions");
                 });
 
+            modelBuilder.Entity("Api.Models.Group", b =>
+                {
+                    b.Navigation("GroupTests");
+                });
+
             modelBuilder.Entity("Api.Models.Question", b =>
                 {
                     b.Navigation("Answers");
@@ -317,6 +327,8 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Api.Models.Test", b =>
                 {
+                    b.Navigation("GroupTests");
+
                     b.Navigation("Parts");
                 });
 #pragma warning restore 612, 618

@@ -13,13 +13,17 @@ public class GroupRepository(DataContext context) : Controller
         return await context.Groups.ToListAsync();
     }
 
-    public async Task<IEnumerable<Group>> GetChildGroupsAsync(int groupId)
+    public async Task<IEnumerable<Group>> GetChildGroupsAsync(int groupId, bool setParentNull = false)
     {
         var groups = await context.Groups.Where(g => g.ParentId == groupId).ToListAsync();
         /*  if (groups.FirstOrDefault()?.ParentId==0)
           {
               return await GetAllAsync();
           }*/
+        if (setParentNull)
+        {
+            groups.ForEach(f=>f.ParentId=0);
+        }
         var result = new List<Group>(groups);
         if (groups.Any())
         {
@@ -43,7 +47,7 @@ public class GroupRepository(DataContext context) : Controller
         {
             var result = new List<Group>();
             result.Add(await context.Groups.FirstAsync(w => w.Id == user.GroupId));
-            result.AddRange(await GetChildGroupsAsync(user.GroupId));
+            result.AddRange(await GetChildGroupsAsync(user.GroupId, true));
             return result;
         }
 

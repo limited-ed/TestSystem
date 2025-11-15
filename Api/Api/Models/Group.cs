@@ -7,6 +7,6 @@ public class Group
     public int ParentId { get; set; }
     public bool CanDelete { get; set; } = true;
     
-    public ICollection<Test> Tests { get; set; }
+    public ICollection<GroupTest> GroupTests { get; set; }
     
 }

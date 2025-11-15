@@ -14,4 +14,14 @@ export class TestService {
   public get():Observable<Test[]>{
     return this.http.get(conf.apiHost+conf.apiEndpoints.test) as Observable<Test[]>;
   }
+
+  public post(item:Test):Observable<Test>{
+    return this.http.post(conf.apiHost+conf.apiEndpoints.test, item) as Observable<Test>;
+  }
+  public put(item:Test):Observable<Test>{
+    return this.http.put(conf.apiHost+conf.apiEndpoints.test+item.id, item) as Observable<Test>;
+  }
+  public delete(id:number):Observable<any>{
+    return this.http.delete(conf.apiHost+conf.apiEndpoints.test+id) as Observable<any>;
+  }
 }

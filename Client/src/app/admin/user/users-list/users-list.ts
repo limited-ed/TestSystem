@@ -82,7 +82,7 @@ export class UsersList {
 
   constructor() {
     effect(() => {
-      let groups = this.store.groupsEntities().filter(f => f.parentId == 0)
+      let groups = this.store.groupsEntities().filter(f => this.store.groupsEntities().findIndex(i => i.id === f.parentId)===-1)
       let nodes = this.buildTree(groups);
       this.treeNodes.set(nodes);
     })
@@ -170,7 +170,7 @@ export class UsersList {
   }
 
   search($event: AutoCompleteCompleteEvent) {
-    let res = this.store.usersEntities().filter(f => 
+    let res = this.store.usersEntities().filter(f =>
       f.fullname.toLowerCase().includes($event.query.toLowerCase()) || f.login.toLowerCase().includes($event.query.toLowerCase())).map(m => m.fullname)
     this.searchedUsers.set(res);
   }

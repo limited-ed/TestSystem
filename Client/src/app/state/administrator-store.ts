@@ -62,6 +62,10 @@ export class AdministratorStore extends signalStore(
         updateTest(entity: Test): void {
             patchState(store, setEntity(entity, { collection: 'tests' }))
         },
+        deleteTest(id: number): void {
+            patchState(store, removeEntity(id, {collection: 'tests'}))
+        }
+
 
     }))
 ) { };

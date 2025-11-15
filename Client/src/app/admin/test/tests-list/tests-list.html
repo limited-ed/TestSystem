@@ -1,7 +1,8 @@
+<p-confirmdialog />
 <p-menu #testmenu [model]="menuItems" [popup]="true" />
 <div class="flex flex-col p-2 h-full">
     <div class="flex py-2 border-b border-b-primary-600">
-        <p-button label="Добавить" icon="pi pi-plus" (click)="newTest()" size="small" [disabled]="!selectedTest()"></p-button>
+        <p-button label="Добавить" icon="pi pi-plus" (click)="newTest()" size="small"></p-button>
     </div>
     <div class="pt-2 h-[calc(100%-104px)] ">
         <p-table [value]="store.testsEntities()" stripedRows class="h-full overflow-auto" [scrollable]="true"

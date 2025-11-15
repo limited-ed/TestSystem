@@ -10,6 +10,10 @@ namespace Api.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropIndex(
+                name: "IX_Users_Id_Login",
+                table: "Users");
+
             migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
@@ -91,24 +95,24 @@ namespace Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GroupTest",
+                name: "GroupsTests",
                 columns: table => new
                 {
-                    GroupsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TestsId = table.Column<int>(type: "INTEGER", nullable: false)
+                    GroupId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TestId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroupTest", x => new { x.GroupsId, x.TestsId });
+                    table.PrimaryKey("PK_GroupsTests", x => new { x.TestId, x.GroupId });
                     table.ForeignKey(
-                        name: "FK_GroupTest_Groups_GroupsId",
-                        column: x => x.GroupsId,
+                        name: "FK_GroupsTests_Groups_GroupId",
+                        column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GroupTest_Tests_TestsId",
-                        column: x => x.TestsId,
+                        name: "FK_GroupsTests_Tests_TestId",
+                        column: x => x.TestId,
                         principalTable: "Tests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -163,6 +167,11 @@ namespace Api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Users_Id_Login",
+                table: "Users",
+                columns: new[] { "Id", "Login" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",
                 table: "Answers",
                 column: "QuestionId");
@@ -173,9 +182,14 @@ namespace Api.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroupTest_TestsId",
-                table: "GroupTest",
-                column: "TestsId");
+                name: "IX_GroupsTests_GroupId",
+                table: "GroupsTests",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GroupsTests_TestId_GroupId",
+                table: "GroupsTests",
+                columns: new[] { "TestId", "GroupId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Questions_CategoryId",
@@ -210,7 +224,7 @@ namespace Api.Migrations
                 name: "Answers");
 
             migrationBuilder.DropTable(
-                name: "GroupTest");
+                name: "GroupsTests");
 
             migrationBuilder.DropTable(
                 name: "TestParts");
@@ -226,6 +240,16 @@ namespace Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "QuestionImages");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Users_Id_Login",
+                table: "Users");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Id_Login",
+                table: "Users",
+                columns: new[] { "Id", "Login" },
+                unique: true);
         }
     }
 }

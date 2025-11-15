@@ -17,6 +17,8 @@ public class DataContext : DbContext
     public virtual DbSet<Test> Tests { get; set; }
     public virtual DbSet<TestPart> TestParts { get; set; }
 
+    public virtual DbSet<GroupTest> GroupsTests { get; set; }
+
     public DataContext()
     {
     }
@@ -27,7 +29,11 @@ public class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>().HasIndex(i => new { i.Id, i.Login }).IsUnique();
+        modelBuilder.Entity<User>().HasIndex(i => new { i.Id, i.Login });
+        modelBuilder.Entity<GroupTest>().HasKey(k => new { k.TestId, k.GroupId });
+        modelBuilder.Entity<GroupTest>().HasIndex(i => new { i.TestId, i.GroupId });
+        modelBuilder.Entity<GroupTest>().HasOne(o => o.Group).WithMany(m =>m.GroupTests).HasForeignKey(o => o.GroupId);
+        modelBuilder.Entity<GroupTest>().HasOne(o => o.Test).WithMany(m => m.GroupTests).HasForeignKey(o => o.TestId);
     }
 
     internal async Task Seed()
