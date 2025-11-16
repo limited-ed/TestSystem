@@ -12,13 +12,13 @@
             </p-iconfield>
         </div>
     </div>
+    <div class="py-2">
+        <p-iftalabel class="w-full">
+            <p-treeselect class="w-full" [(ngModel)]="selectedGroup" [options]="treeNodes()" inputId="select" />
+            <label for="select">Выбор группы</label>
+        </p-iftalabel>
+    </div>
     <div class="flex w-full h-full overflow-auto">
-        <div class="w-[30%] h-full">
-            <p-tree [value]="treeNodes()" selectionMode="single" [(selection)]="selectedGroup"
-                class=" h-full overflow-auto">
-
-            </p-tree>
-        </div>
         <div class="w-[70%] h-[calc(100%-52px)]">
             <p-table [value]="users()" stripedRows [globalFilterFields]="['fullname', 'login']" class="h-full"
                 [scrollable]="true" scrollHeight="100%" size="small">

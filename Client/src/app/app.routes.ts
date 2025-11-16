@@ -26,8 +26,8 @@ export const routes: Routes = [
         ]
     },
     {
-        path: "user", canActivate: [canActivateUser], children: [
-            { path: "", component: UserDashboard, pathMatch: 'full' }
+        path: "user", loadComponent: () => import('user/user-dashboard/user-dashboard').then(c=>c.UserDashboard) ,canActivate: [canActivateUser], children: [
+           
         ]
     }
 

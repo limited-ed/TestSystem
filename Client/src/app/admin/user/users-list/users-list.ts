@@ -10,6 +10,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Menu, MenuModule } from 'primeng/menu';
 import { TableModule } from 'primeng/table';
 import { TreeModule } from 'primeng/tree';
+import { TreeSelectModule } from 'primeng/treeselect';
+import { IftaLabelModule } from 'primeng/iftalabel';
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 
 import { map, Observable, throwError } from 'rxjs';
@@ -24,7 +26,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-users-list',
-  imports: [TreeModule, TableModule, ButtonModule, MenuModule, InputIcon, IconField, InputTextModule, AutoCompleteModule, FormsModule],
+  imports: [TreeModule, TableModule, ButtonModule, MenuModule, InputIcon, IconField, InputTextModule, AutoCompleteModule, FormsModule, TreeSelectModule, IftaLabelModule],
   providers: [DialogService],
   templateUrl: './users-list.html',
   styleUrl: './users-list.css'
