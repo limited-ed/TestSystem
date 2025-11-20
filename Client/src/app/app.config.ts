@@ -25,7 +25,9 @@ export const ApiConfiguration = {
     users: '/api/user/',
     questions: '/api/question/',
     cource: '/api/cource/',
-    test: '/api/test/'
+    test: '/api/test/',
+    testForUser: '/api/testforuser/',
+    startTest: '/api/starttest/',
   },
   apiHost: environment.apiServer
 }

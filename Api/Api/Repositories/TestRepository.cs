@@ -23,6 +23,14 @@ public class TestRepository(DataContext context)
             return await context.Tests.FirstOrDefaultAsync(i => i.Id == id);
         }
     }
+    
+    public async Task<IEnumerable<Test>> GetByUserId(int id)
+    {
+        var user = await context.Users.FirstAsync(f => f.Id == id);
+        var tests = await context.Tests.Include(i => i.GroupTests).ToListAsync();
+        var foruser = tests.Where(i => i.GroupTests.Any(a=>a.GroupId==user.GroupId)).ToList();
+        return foruser;
+    }   
 
     public async Task<Test> AddTest(Test test)
     {

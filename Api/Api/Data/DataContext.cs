@@ -16,8 +16,9 @@ public class DataContext : DbContext
     public virtual DbSet<Image> QuestionImages { get; set; }
     public virtual DbSet<Test> Tests { get; set; }
     public virtual DbSet<TestPart> TestParts { get; set; }
-
     public virtual DbSet<GroupTest> GroupsTests { get; set; }
+    public virtual DbSet<TestResult> TestResults { get; set; }
+    public virtual DbSet<ResultItem> ResultItems { get; set; }
 
     public DataContext()
     {
@@ -32,7 +33,7 @@ public class DataContext : DbContext
         modelBuilder.Entity<User>().HasIndex(i => new { i.Id, i.Login });
         modelBuilder.Entity<GroupTest>().HasKey(k => new { k.TestId, k.GroupId });
         modelBuilder.Entity<GroupTest>().HasIndex(i => new { i.TestId, i.GroupId });
-        modelBuilder.Entity<GroupTest>().HasOne(o => o.Group).WithMany(m =>m.GroupTests).HasForeignKey(o => o.GroupId);
+        modelBuilder.Entity<GroupTest>().HasOne(o => o.Group).WithMany(m => m.GroupTests).HasForeignKey(o => o.GroupId);
         modelBuilder.Entity<GroupTest>().HasOne(o => o.Test).WithMany(m => m.GroupTests).HasForeignKey(o => o.TestId);
     }
 
@@ -92,9 +93,12 @@ public class DataContext : DbContext
         {
             for (int i = 1; i < 20; i++)
             {
-                var quest = new Question() 
+                var quest = new Question()
                 {
-                    Id = i, CategoryId = i - (3*((i-1)/3)), Content = $"Вопрос {i} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", Answers = new List<Answer>()
+                    Id = i, CategoryId = i - (3 * ((i - 1) / 3)),
+                    Content =
+                        $"Вопрос {i} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                    Answers = new List<Answer>()
                     {
                         new() { Content = "Ответ 1", IsRight = true },
                         new() { Content = "Ответ 2", IsRight = false },
@@ -104,8 +108,8 @@ public class DataContext : DbContext
                 };
 
                 Questions.Add(quest);
-                 
             }
+
             await SaveChangesAsync();
         }
 
@@ -118,8 +122,7 @@ public class DataContext : DbContext
                 Timer = 15,
                 Parts = new()
                 {
-                    new() {CategoryId = 1, Count = 5},
-
+                    new() { CategoryId = 1, Count = 5 },
                 }
             });
             await SaveChangesAsync();

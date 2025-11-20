@@ -18,6 +18,7 @@ namespace Api.Controllers
             return Json(await repository.GetAll());
         }
 
+        
         [HttpPost]
         public async Task<IActionResult> Post(Test test)
         {

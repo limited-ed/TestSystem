@@ -9,6 +9,7 @@ public class Question
     public int Id { get; set; }
     public string Content { get; set; }
     public int CategoryId { get; set; }
+    [JsonIgnore]
     public Category Category { get; set; }
     
     public int? ImageId { get; set; }

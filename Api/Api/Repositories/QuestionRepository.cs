@@ -26,6 +26,15 @@ public class QuestionRepository(DataContext context)
         return question;
     }
 
+    public async Task<IEnumerable<Question>> GetByCategory(int categoryId, int items)
+    {
+        var questions = context.Questions
+            .Include(i => i.Answers)
+            .Where(w => w.CategoryId == categoryId)
+            .Take(items);
+        return await questions.ToListAsync();
+    }
+
     public async Task<Question> AddQuestion(Question question)
     {
         context.Add(question);
@@ -35,19 +44,21 @@ public class QuestionRepository(DataContext context)
 
     public async Task UpdateQuestion(Question model)
     {
-        var existingQuestion = await context.Questions.Include(i => i.Answers).FirstOrDefaultAsync(i => i.Id == model.Id);
+        var existingQuestion =
+            await context.Questions.Include(i => i.Answers).FirstOrDefaultAsync(i => i.Id == model.Id);
         if (existingQuestion != null)
         {
             context.Entry(existingQuestion).CurrentValues.SetValues(model);
             foreach (var existingAnswer in existingQuestion.Answers)
             {
-                if(!model.Answers.Any(i => i.Id == existingAnswer.Id))
+                if (!model.Answers.Any(i => i.Id == existingAnswer.Id))
                     context.Answers.Remove(existingAnswer);
             }
 
             foreach (var modelAnswer in model.Answers)
             {
-                var existingAnswer = existingQuestion.Answers.FirstOrDefault( f => f.Id == modelAnswer.Id && f.Id != default(int));
+                var existingAnswer =
+                    existingQuestion.Answers.FirstOrDefault(f => f.Id == modelAnswer.Id && f.Id != default(int));
 
                 if (existingAnswer is not null)
                 {
@@ -59,6 +70,7 @@ public class QuestionRepository(DataContext context)
                     context.Entry(modelAnswer).CurrentValues.SetValues(modelAnswer);
                 }
             }
+
             await context.SaveChangesAsync();
         }
         else

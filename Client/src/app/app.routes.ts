@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { canActivateAdmin, canActivateUser } from 'core';
 import { canActivateMain } from 'core/activators/activators';
+import { canActivateTest } from 'core/activators/test-activator';
+import { PreventBackButton } from 'core/guards/prevent-back-button.guard';
 import { UserDashboard } from 'user/user-dashboard/user-dashboard';
 
 export const routes: Routes = [
@@ -25,10 +27,7 @@ export const routes: Routes = [
 
         ]
     },
-    {
-        path: "user", loadComponent: () => import('user/user-dashboard/user-dashboard').then(c=>c.UserDashboard) ,canActivate: [canActivateUser], children: [
-           
-        ]
-    }
+    { path: "user", loadComponent: () => import('user/user-dashboard/user-dashboard').then(c => c.UserDashboard), canActivate: [canActivateUser]},
+    { path: 'test', loadComponent: ()=> import('user/test-component/test-component').then(c=>c.TestComponent), canActivate:[canActivateTest], }
 
 ];

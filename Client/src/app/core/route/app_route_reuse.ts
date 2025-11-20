@@ -14,7 +14,7 @@ export class AppRouteReuseStrategy implements RouteReuseStrategy {
     }
     store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void {
         let path = this.getFullPath(route);
-        if (handle) this.storeCache[path] = {route, handle}
+        if (handle && route.url.findIndex(f=>f.path.includes('test'))===-1) this.storeCache[path] = {route, handle}
     }
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         let path = this.getFullPath(route);

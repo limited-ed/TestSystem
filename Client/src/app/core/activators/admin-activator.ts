@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot,  RouterStateSnapshot } from '@angular/router';
 import { UserRoles } from 'models';
 import { ApplicationStore } from 'state/application-store';
 

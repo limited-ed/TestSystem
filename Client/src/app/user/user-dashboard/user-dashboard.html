@@ -1,1 +1,32 @@
-<p>user-dashboard works!</p>
+<div class="w-full h-[100vh] flex flex-col ">
+    <div class="h-15 border-b-2 border-primary-500 flex justify-end items-center">
+        <theme-switcher></theme-switcher>
+        <div>
+            <p-splitbutton text severity="secondary" [model]="avatarItems">
+                <ng-template #content>
+
+                    <p-avatar image="/user.png" shape="circle" [style.height]="'auto'" />
+
+
+                    <span>{{userName() }}</span>
+                </ng-template>
+            </p-splitbutton>
+        </div>
+    </div>
+    <div class="grow-1 grid items-center justify-center login_back">
+        <div class="w-150  m-auto flex flex-col gap-4 rounded-2xl bg-white p-6 border-1 border-gray-400 items-center dark:bg-surface-800">
+            <div class="text-2xl font-semibold">
+                Добро пожаловать
+            </div>
+            <div>
+                Чтобы приступить к тестированию, выберите тест
+            </div>
+            <p-select [options]="userStore.tests()" optionLabel="title" optionValue="id" [(ngModel)]="selectedTest"
+                placeholder="Выберите тест" class="" fluid />
+            <div>
+                <p-button label="Начать" variant="outlined" severity="info" styleClass="w-60" [disabled]="!selectedTest()" (click)="startTest()"/>
+            </div>
+        </div>
+    </div>
+
+</div>

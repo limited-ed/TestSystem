@@ -10,7 +10,7 @@ type ApplicationState = {
     isLogged: boolean;
     user: UserInfo | undefined | null,
     token: string | undefined,
-    refrehhToken?: string
+    refreshToken?: string
     theme: ThemeState
 }
 
@@ -18,7 +18,7 @@ const initialState: ApplicationState = {
     isLogged: false,
     token: undefined,
     user: null,
-    refrehhToken: undefined,
+    refreshToken: undefined,
     theme: {
         preset: 'Aura',
         primary: 'cyan',
