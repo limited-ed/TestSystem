@@ -49,6 +49,7 @@ namespace Api.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     QuestionId = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     Answers = table.Column<string>(type: "TEXT", nullable: true),
                     Right = table.Column<bool>(type: "INTEGER", nullable: false),
                     TestResultId = table.Column<int>(type: "INTEGER", nullable: true)
@@ -67,7 +68,18 @@ namespace Api.Migrations
                         column: x => x.TestResultId,
                         principalTable: "TestResults",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ResultItems_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResultItems_Id_QuestionId_UserId",
+                table: "ResultItems",
+                columns: new[] { "Id", "QuestionId", "UserId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ResultItems_QuestionId",
@@ -78,6 +90,11 @@ namespace Api.Migrations
                 name: "IX_ResultItems_TestResultId",
                 table: "ResultItems",
                 column: "TestResultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ResultItems_UserId",
+                table: "ResultItems",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TestResults_TestId",

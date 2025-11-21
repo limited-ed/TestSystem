@@ -8,6 +8,7 @@ type UserState = {
     tests: Test[],
     testToken: string
     startedTest: Test 
+    resultItems: Array<ResultItem>
 }
 
 const initialState: UserState = {
@@ -21,14 +22,14 @@ const initialState: UserState = {
         timer: 0,
         groupTests: [],
         userId: 0
-    }
+    },
+    resultItems:[]
 }
 
 @Injectable({ providedIn: 'root' })
 export class UserStore extends signalStore(
     withState(initialState),
     withEntities({ entity: type<Question>(), collection: 'questions' }),
-    withEntities({entity:type<ResultItem>(), collection: 'resultItems'}),
     withMethods((store) => ({
         updateTest(newTests: Test[]): void {
             patchState(store, { tests: newTests })
@@ -49,7 +50,7 @@ export class UserStore extends signalStore(
             patchState(store, {...state});
         },
         addResultItem(result: ResultItem): void {
-            patchState(store, addEntity(result, {collection: 'resultItems'}))
+            patchState(store, {resultItems: [...store.resultItems(), result]})
         },
 
     }))

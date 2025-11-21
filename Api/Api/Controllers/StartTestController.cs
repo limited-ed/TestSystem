@@ -30,14 +30,6 @@ public class StartTestController(TestRepository testRepository, QuestionReposito
         var span = CollectionsMarshal.AsSpan(questions);
         Random.Shared.Shuffle(span);
         
-        foreach (var q in span)
-        {
-            foreach (var answer in q.Answers)
-            {
-                answer.IsRight = false;
-            }
-        }
-
         var testResult = new TestResult()
         {
             TestId = id,
@@ -67,6 +59,8 @@ public class StartTestController(TestRepository testRepository, QuestionReposito
             PropertyNameCaseInsensitive = true,
             WriteIndented = true
         };
+
+        test.GroupTests = null;
         
         return Json(new { token = token, test=await testRepository.GetById(id), questions = questions }, options);
     }

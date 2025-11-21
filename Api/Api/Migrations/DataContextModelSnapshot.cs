@@ -151,11 +151,18 @@ namespace Api.Migrations
                     b.Property<int?>("TestResultId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
                     b.HasIndex("TestResultId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("Id", "QuestionId", "UserId");
 
                     b.ToTable("ResultItems");
                 });
@@ -345,7 +352,15 @@ namespace Api.Migrations
                         .WithMany("Results")
                         .HasForeignKey("TestResultId");
 
+                    b.HasOne("User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Question");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Api.Models.Test", b =>

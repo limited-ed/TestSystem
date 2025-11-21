@@ -15,6 +15,7 @@ import { jwtInterceptor } from 'core/jwt/';
 import { of } from 'rxjs';
 import { AppTheme } from 'app.theme';
 import { provideReuseStrategy } from 'core/route/app_route_reuse';
+import { UserStore } from 'state/user-store';
 
 
 export const ApiConfiguration = {
@@ -49,7 +50,14 @@ const jwtOptions: JwtOptions = {
   whiteList: [ApiConfiguration.apiHost],
   getTokenFn: () => {
     const store = inject(ApplicationStore);
-    const token = store.token();
+    const userStore = inject(UserStore)
+    let token;
+    if (store.user()?.role === 'user' && userStore.mode() === 'testing') {
+      token=userStore.testToken();
+    } else {
+      token = store.token();
+    }
+
     return token;
   },
   refreshTokenFn: () => {
@@ -64,7 +72,7 @@ export const appConfig: ApplicationConfig = {
     provideJwtOptions(jwtOptions),
     provideHttpClient(withInterceptors([jwtInterceptor]), withFetch()),
     provideRouter(routes, withComponentInputBinding()),
-    provideReuseStrategy(),
+    //    provideReuseStrategy(),
     provideAnimationsAsync(),
     providePrimeNG(primeOptions)
   ]

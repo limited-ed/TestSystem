@@ -57,7 +57,7 @@ export class TestComponent implements CanComponentDeactivate {
           if (this.currentTimer() > 0) {
             this.currentTimer.update((val) => val - 1);
           } else {
-           // this.router.navigate[]
+            // this.router.navigate[]
           }
 
         }, 1000);
@@ -73,11 +73,11 @@ export class TestComponent implements CanComponentDeactivate {
       right: false
     }
     this.userStore.addResultItem(res);
-    let next = this.userStore.questionsEntities().findIndex((value, index, _) => index > this.currentNumQuestion() && !this.userStore.resultItemsEntities().map(m => m.id).includes(value.id));
+    let next = this.userStore.questionsEntities().findIndex((value, index, _) => index > this.currentNumQuestion() && !this.userStore.resultItems().map(m => m.questionId).includes(value.id));
     if (next !== -1) {
       this.currentNumQuestion.set(next);
     } else {
-      if (this.userStore.resultItemsEntities().length === this.userStore.questionsEntities().length) {
+      if (this.userStore.resultItems().length === this.userStore.questionsEntities().length) {
         this.currentNumQuestion.set(0);
         return;
       }
@@ -86,11 +86,14 @@ export class TestComponent implements CanComponentDeactivate {
   }
 
   skipAnswer() {
+    let next;
     if (this.currentNumQuestion() !== this.userStore.questionsEntities().length - 1) {
-      this.currentNumQuestion.update(v => v + 1);
+      next = this.userStore.questionsEntities().findIndex((value, index, _) => index > this.currentNumQuestion() && !this.userStore.resultItems().map(m => m.questionId).includes(value.id));
     } else {
-      this.currentNumQuestion.set(0);
+      next = this.userStore.questionsEntities().findIndex((value, _, __) => !this.userStore.resultItems().map(m => m.questionId).includes(value.id));
+
     }
+    this.currentNumQuestion.set(next);
   }
 
   shuffleArray<T>(array: Array<T>): Array<T> {

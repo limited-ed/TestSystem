@@ -54,7 +54,7 @@
     </div>
     <div class="grid grid-cols-2 w-full justify-items-center pb-10">
         <p-button label="Подтвердить ответ" styleClass="w-100" size="large" (click)="confirmAnswer()" />
-        <p-button label="Пропустить вопрос" variant="outlined" severity="warn" styleClass="w-100" size="large" />
+        <p-button label="Пропустить вопрос" variant="outlined" severity="warn" styleClass="w-100" size="large" (click)="skipAnswer()" />
     </div>
     <div [style.--p-progressbar-value-background]="currentTimer()>total/4?'var(--p-primary-color)':'var(--p-red-600)'">
         <p-progress-bar showValue="false" [value]="timer()">
