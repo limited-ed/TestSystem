@@ -1,3 +1,4 @@
+export * from './answer-item';
 export * from './answer';
 export * from './auth/authModel';
 export * from './auth/authResponse';
@@ -10,6 +11,8 @@ export * from './menu/menu-item';
 export * from './question-image';
 export * from './question';
 export * from './result-item';
+export * from './result';
+export * from './start-test-info';
 export * from './test-part';
 export * from './test-result';
 export * from './test';

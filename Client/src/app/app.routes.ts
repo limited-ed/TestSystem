@@ -27,7 +27,8 @@ export const routes: Routes = [
 
         ]
     },
-    { path: "user", loadComponent: () => import('user/user-dashboard/user-dashboard').then(c => c.UserDashboard), canActivate: [canActivateUser]},
-    { path: 'test', loadComponent: ()=> import('user/test-component/test-component').then(c=>c.TestComponent), canActivate:[canActivateTest], }
+    { path: "user", loadComponent: () => import('user/user-dashboard/user-dashboard').then(c => c.UserDashboard), canActivate: [canActivateUser] },
+    { path: 'test', loadComponent: () => import('user/test-component/test-component').then(c => c.TestComponent), canActivate: [canActivateTest], },
+    { path: 'result', loadComponent: () => import('user/result-component/result-component'). then(c => c.ResultComponent)}
 
 ];

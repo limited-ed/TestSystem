@@ -1,14 +1,62 @@
 <div class="h-[100vh] flex flex-col">
+    <div class="h-50">
+        <div class="grid grid-cols-2 p-4 border-b-2 border-primary-700">
+            <div class="">
+                <h1 class="text-2xl font-bold"><span class="text-primary-700">Silk</span>TEST</h1>
+            </div>
+            <div class="flex justify-end items-center text-lg gap-4">
+                <p-avatar image="/user.png" shape="circle" [style.height]="'auto'" />
+                <span class="block">
+                    {{appStore.user()?.fullname}}
+                </span>
+                <!--             <div>
+                    <p-button icon="pi pi-sign-out"  [text]="true" severity="danger" label="Выход" />
+                </div> -->
+            </div>
+        </div>
+        <div class="grid grid-cols-2">
+            <div class="p-4">
+                Вопрос {{currentNumQuestion()+1}} / {{questionsCount()}}
+            </div>
+            <div class="flex justify-end items-center text-lg px-10">
+                Время: <span class="font-bold pl-2" [ngClass]="{'color-red-600':currentTimer()>total/4}">{{timeInMinutes()}}</span>
+            </div>
+        </div>
+    </div>
     <div class="grow-1">
         <div>
+            <div class="p-4 text-2xl">
+                {{currentQuestion().content}}
+            </div>
+            <div class="flex flex-col gap-4 px-10 text-xl">
+                @for (q of shuffled(); track q.id) {
+                <div class="checkbox-wrapper-28">
+                    <input [id]="'a'+$index" type="checkbox" class="promoted-input-checkbox" />
+                    <svg>
+                        <use xlink:href="#checkmark-28" />
+                    </svg>
+                    <label [for]="'a'+$index">
+                        {{q.content}}
+                    </label>
+                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+                        <symbol id="checkmark-28" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-miterlimit="10" fill="none"
+                                d="M22.9 3.7l-15.2 16.6-6.6-7.1">
+                            </path>
+                        </symbol>
+                    </svg>
+                </div>
+
+                }
+            </div>
 
         </div>
     </div>
     <div class="grid grid-cols-2 w-full justify-items-center pb-10">
-        <p-button label="Подтвердить ответ" styleClass="w-100"  size="large"/>
-        <p-button label="Пропустить вопрос" variant="outlined" severity="warn"  styleClass="w-100"  size="large"/>
+        <p-button label="Подтвердить ответ" styleClass="w-100" size="large" (click)="confirmAnswer()" />
+        <p-button label="Пропустить вопрос" variant="outlined" severity="warn" styleClass="w-100" size="large" />
     </div>
-    <div>
+    <div [style.--p-progressbar-value-background]="currentTimer()>total/4?'var(--p-primary-color)':'var(--p-red-600)'">
         <p-progress-bar showValue="false" [value]="timer()">
 
         </p-progress-bar>

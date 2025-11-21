@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core"
 import { patchState, signalStore, type, withMethods, withState } from "@ngrx/signals"
-import { removeEntity, setAllEntities, updateEntities, withEntities } from "@ngrx/signals/entities"
-import { Question, Test } from "models"
+import { addEntity, removeEntity, setAllEntities, updateEntities, withEntities } from "@ngrx/signals/entities"
+import { Question, ResultItem, Test } from "models"
 
 type UserState = {
     mode: 'select' | 'testing',
@@ -28,6 +28,7 @@ const initialState: UserState = {
 export class UserStore extends signalStore(
     withState(initialState),
     withEntities({ entity: type<Question>(), collection: 'questions' }),
+    withEntities({entity:type<ResultItem>(), collection: 'resultItems'}),
     withMethods((store) => ({
         updateTest(newTests: Test[]): void {
             patchState(store, { tests: newTests })
@@ -46,7 +47,10 @@ export class UserStore extends signalStore(
         },
         updateState(state: Partial<UserState>): void {
             patchState(store, {...state});
-        }
+        },
+        addResultItem(result: ResultItem): void {
+            patchState(store, addEntity(result, {collection: 'resultItems'}))
+        },
 
     }))
 ) { };
