@@ -29,6 +29,7 @@ export const ApiConfiguration = {
     test: '/api/test/',
     testForUser: '/api/testforuser/',
     startTest: '/api/starttest/',
+    endTest: '/api/endtest/'
   },
   apiHost: environment.apiServer
 }
@@ -52,7 +53,7 @@ const jwtOptions: JwtOptions = {
     const store = inject(ApplicationStore);
     const userStore = inject(UserStore)
     let token;
-    if (store.user()?.role === 'user' && userStore.mode() === 'testing') {
+    if (store.user()?.role === 'User' && userStore.mode() === 'testing') {
       token=userStore.testToken();
     } else {
       token = store.token();
@@ -72,7 +73,7 @@ export const appConfig: ApplicationConfig = {
     provideJwtOptions(jwtOptions),
     provideHttpClient(withInterceptors([jwtInterceptor]), withFetch()),
     provideRouter(routes, withComponentInputBinding()),
-    //    provideReuseStrategy(),
+    provideReuseStrategy(),
     provideAnimationsAsync(),
     providePrimeNG(primeOptions)
   ]

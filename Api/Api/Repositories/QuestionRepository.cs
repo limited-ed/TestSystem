@@ -26,6 +26,7 @@ public class QuestionRepository(DataContext context)
         return question;
     }
 
+   
     public async Task<IEnumerable<Question>> GetByCategory(int categoryId, int items)
     {
         var questions = context.Questions

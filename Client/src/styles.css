@@ -1,10 +1,61 @@
-/* You can add global styles to this file, and also import other style files */
 @import url(../node_modules/primeicons/primeicons.css);
 
 @import "tailwindcss";
 @plugin "tailwindcss-primeui";
 
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter24pt-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter24pt-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter24pt-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Inter';
+    src: url('/fonts/Inter24pt-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@media screen and (max-width:1440px)  {
+    html {
+        font-size: 14px
+    }
+}
+
+@media screen and (max-width:1080px)  {
+    html {
+        font-size: 12px
+    }
+}
+
+
+/* You can add global styles to this file, and also import other style files */
+
 @custom-variant dark (&:where(.dark, .dark *));
+
+html {
+    font-family: 'Inter';
+}
 
 html * {
     box-sizing: border-box;

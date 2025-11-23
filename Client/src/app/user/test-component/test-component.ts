@@ -8,11 +8,24 @@ import { ApplicationStore } from 'state';
 import { UserStore } from 'state/user-store';
 import { StyleClass } from "primeng/styleclass";
 import { AvatarModule } from 'primeng/avatar';
-import { ResultItem } from 'models';
+import { ResultItem, TestResult } from 'models';
+import { form, Field } from '@angular/forms/signals'
+import { EndTestService } from 'services/end-test-service/end-test-service';
+
+
+interface AnswerCheckBoxModel {
+  answerId: number;
+  checked: boolean;
+}
+
+interface AnswerItems {
+  items: AnswerCheckBoxModel[]
+}
+
 
 @Component({
   selector: 'app-test-component',
-  imports: [ButtonModule, ProgressBarModule, AvatarModule, NgClass],
+  imports: [ButtonModule, ProgressBarModule, AvatarModule, NgClass, Field],
   templateUrl: './test-component.html',
   styleUrl: './test-component.css'
 })
@@ -21,6 +34,7 @@ export class TestComponent implements CanComponentDeactivate {
   router = inject(Router)
   userStore = inject(UserStore);
   appStore = inject(ApplicationStore);
+  endtestSrv = inject(EndTestService);
 
   platformId = inject(PLATFORM_ID);
 
@@ -38,65 +52,111 @@ export class TestComponent implements CanComponentDeactivate {
 
   currentNumQuestion = signal(0);
   currentQuestion = linkedSignal(() => this.userStore.questionsEntities()[this.currentNumQuestion()]);
-  questionsCount = computed(() => this.userStore.startedTest().parts.reduce((acc, val) => acc + val.count, 0));
-  shuffled = computed(() => this.shuffleArray(this.currentQuestion().answers));
+  shuffled = computed(() => this.shuffleAnswers(this.currentQuestion().answers.length));
 
+  answers = signal<AnswerItems>({ items: [] })
+  answersForm = form(this.answers);
 
-  procents = computed(() => { });
   canComponentDeactivate(): GuardResult {
     return this.userStore.mode() !== 'testing';
   }
 
   constructor() {
-    effect(() => {
-      this.total = this.userStore.startedTest().timer * 60;
-      this.currentTimer.set(this.total);
+    this.total = this.userStore.startedTest().timer * 60;
+    this.currentTimer.set(this.total);
+    this.setAnswers();
 
-      if (isPlatformBrowser(this.platformId)) {
-        var counter = window.setInterval(() => {
-          if (this.currentTimer() > 0) {
-            this.currentTimer.update((val) => val - 1);
-          } else {
-            // this.router.navigate[]
-          }
-
-        }, 1000);
-      }
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      var counter = window.setInterval(() => {
+        if (this.currentTimer() > 0) {
+          this.currentTimer.update((val) => val - 1);
+        } else {
+          this.userStore.updateTestResult({ complete: true });
+          let answeredIds = this.userStore.testResult().results.map(m => m.questionId);
+          this.userStore.questionsEntities().filter(f => !answeredIds.includes(f.id)).forEach((v, _, __) => {
+            let res: ResultItem = {
+              id: 0,
+              questionId: v.id,
+              testId: this.userStore.startedTest().id,
+              answers: [],
+              right: false
+            }
+            this.userStore.addResultItem(res);
+          });
+          this.endTest();
+        }
+      }, 1000);
+    }
   }
 
   confirmAnswer() {
     let res: ResultItem = {
       id: 0,
+      testId: this.userStore.startedTest().id,
       questionId: this.currentQuestion().id,
-      answers: [],
+      answers: this.answersForm.items().value().filter(f=>f.checked).map(m => m.answerId),
       right: false
     }
     this.userStore.addResultItem(res);
-    let next = this.userStore.questionsEntities().findIndex((value, index, _) => index > this.currentNumQuestion() && !this.userStore.resultItems().map(m => m.questionId).includes(value.id));
-    if (next !== -1) {
-      this.currentNumQuestion.set(next);
-    } else {
-      if (this.userStore.resultItems().length === this.userStore.questionsEntities().length) {
-        this.currentNumQuestion.set(0);
-        return;
-      }
-
+    this.userStore.updateTestResult({ answered: this.userStore.testResult().answered + 1 })
+    if (this.userStore.testResult().results.length === this.userStore.questionsEntities().length) {
+      this.endTest();
+      return;
     }
+    this.nextQuestion();
   }
+
 
   skipAnswer() {
-    let next;
-    if (this.currentNumQuestion() !== this.userStore.questionsEntities().length - 1) {
-      next = this.userStore.questionsEntities().findIndex((value, index, _) => index > this.currentNumQuestion() && !this.userStore.resultItems().map(m => m.questionId).includes(value.id));
-    } else {
-      next = this.userStore.questionsEntities().findIndex((value, _, __) => !this.userStore.resultItems().map(m => m.questionId).includes(value.id));
-
-    }
-    this.currentNumQuestion.set(next);
+    this.nextQuestion();
   }
 
-  shuffleArray<T>(array: Array<T>): Array<T> {
+  setAnswers() {
+    this.answers.set(
+      {
+        items: this.currentQuestion().answers.map(
+          m => ({ answerId: m.id, checked: false })
+        )
+      }
+    );
+  }
+
+  private endTest() {
+    this.userStore.updateTestResult({ complete: true });
+    this.endtestSrv.put(this.userStore.testResult()).subscribe({
+      next: (res) => {
+        this.userStore.setTestResult(res);
+        this.userStore.updateMode('result');
+      },
+      error: (err) => {
+
+      },
+      complete: () => {
+        this.router.navigate(['result'], { replaceUrl: true });
+      }
+    });
+  }
+
+  private nextQuestion() {
+    let next;
+    if (this.currentNumQuestion() !== this.userStore.testResult().total) {
+      next = this.userStore.questionsEntities().findIndex(
+        (value, index, _) => index > this.currentNumQuestion() && !this.userStore.testResult().results.map(m => m.questionId).includes(value.id)
+      );
+    } else {
+      next = this.userStore.questionsEntities().findIndex((value, _, __) => !this.userStore.testResult().results.map(m => m.questionId).includes(value.id));
+    }
+    this.currentNumQuestion.set(next);
+    this.setAnswers();
+
+  }
+
+  shuffleAnswers(length: number){
+    let a = Array.from({ length: length }, (_, i) => i );
+    return this.shuffleArray(a);
+  }
+
+  private shuffleArray<T>(array: Array<T>): Array<T> {
     for (let i = array.length - 1; i > 0; i--) {
       // Generate a random index from 0 to i
       const j = Math.floor(Math.random() * (i + 1));

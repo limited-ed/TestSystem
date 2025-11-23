@@ -35,7 +35,8 @@ public class StartTestController(TestRepository testRepository, QuestionReposito
             TestId = id,
             UserId = ClaimUtils.GetClaimAsInt(User.Claims, "userId"),
             Complete = false,
-            Total = questions.Count
+            Total = questions.Count,
+            DateTime = DateTime.UtcNow
         };
 
         testResult = await testResultRepository.Add(testResult);
@@ -43,11 +44,11 @@ public class StartTestController(TestRepository testRepository, QuestionReposito
         var claims = new Dictionary<string, object>()
         {
             { "testId", id },
-            { "testResultId" , testResult},
+            { "testResultId" , testResult.Id},
             { "role" , "Test"}
         };
 
-        var token = jwtUtils.GenerateJwtToken(claims);
+        var token = jwtUtils.GenerateJwtToken(claims, DateTime.UtcNow.AddMinutes(test.Timer+1));
 
         var options = new JsonSerializerOptions()
         {
@@ -62,6 +63,6 @@ public class StartTestController(TestRepository testRepository, QuestionReposito
 
         test.GroupTests = null;
         
-        return Json(new { token = token, test=await testRepository.GetById(id), questions = questions }, options);
+        return Json(new { token = token, test=await testRepository.GetById(id), testResult = testResult, questions = questions }, options);
     }
 }

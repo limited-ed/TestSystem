@@ -72,9 +72,11 @@ export class UserDashboard implements OnInit {
       this.startTestSrv.startTest(this.selectedTest()).subscribe({
         next: (res)=>{
           this.userStore.updateQuestions(res.questions);
+          res.testResult.results=[];
           this.userStore.updateState({
             mode: 'testing',
             startedTest: res.test,
+            testResult: res.testResult,
             testToken: res.token
           });
           this.router.navigate(['/test'])

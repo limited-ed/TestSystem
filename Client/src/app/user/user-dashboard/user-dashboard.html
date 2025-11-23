@@ -24,7 +24,7 @@
             <p-select [options]="userStore.tests()" optionLabel="title" optionValue="id" [(ngModel)]="selectedTest"
                 placeholder="Выберите тест" class="" fluid />
             <div>
-                <p-button label="Начать" variant="outlined" severity="info" styleClass="w-60" [disabled]="!selectedTest()" (click)="startTest()"/>
+                <p-button label="Начать" variant="outlined"  styleClass="w-60" [disabled]="!selectedTest()" (click)="startTest()"/>
             </div>
         </div>
     </div>

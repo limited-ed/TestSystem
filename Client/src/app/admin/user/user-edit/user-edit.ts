@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject, input, linkedSignal, signal } from '@angular/core';
-import { form, required, validate, customError, Control } from '@angular/forms/signals';
+import { form, required, validate, customError, Field } from '@angular/forms/signals';
 import { RoleSelector } from 'admin/selector/selector';
 import { User } from 'models';
 import { ButtonModule } from 'primeng/button';
@@ -9,7 +9,7 @@ import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-user-edit',
-  imports: [ButtonModule, InputTextModule, SelectModule, Control, RoleSelector],
+  imports: [ButtonModule, InputTextModule, SelectModule, Field, RoleSelector],
   templateUrl: './user-edit.html',
   styleUrl: './user-edit.css'
 })

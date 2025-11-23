@@ -19,7 +19,7 @@ namespace Api.Controllers
                 Int32.TryParse(User.Claims.FirstOrDefault(f => f.Type == "userId")?.Value, out var id))
             {
                 var groupId=Int32.Parse(User.Claims.First(f => f.Type == "groupId").Value);
-                var result = groupId == 1 ? await repository.GetAllAsync() : await repository.GetGroupsForUser(id);
+                var result = groupId == 1 ? await repository.GetAllAsync() : await repository.GetGroupsForUser(id );
                 return Json(result);
             }
 

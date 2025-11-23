@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component, effect, inject, signal } from '@angular/core';
 
-import { form, required, Control } from '@angular/forms/signals';
+import { form, required, Field } from '@angular/forms/signals';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'core/jwt';
 import { UserRoles } from 'models';
@@ -16,7 +16,7 @@ import { ApplicationStore } from 'state/application-store';
 
 @Component({
   selector: 'app-login',
-  imports: [ButtonModule, CheckboxModule, InputTextModule, Control],
+  imports: [ButtonModule, CheckboxModule, InputTextModule, Field],
   templateUrl: './login.html',
   styleUrl: './login.css'
 

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251121191002_TestResults")]
+    [Migration("20251122041246_TestResults")]
     partial class TestResults
     {
         /// <inheritdoc />
@@ -151,21 +151,21 @@ namespace Api.Migrations
                     b.Property<bool>("Right")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("TestResultId")
+                    b.Property<int>("TestId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("TestResultId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
+                    b.HasIndex("TestId");
+
                     b.HasIndex("TestResultId");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("Id", "QuestionId", "UserId");
+                    b.HasIndex("Id", "QuestionId", "TestId");
 
                     b.ToTable("ResultItems");
                 });
@@ -351,19 +351,19 @@ namespace Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("User", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Api.Models.TestResult", null)
                         .WithMany("Results")
                         .HasForeignKey("TestResultId");
 
-                    b.HasOne("User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Question");
 
-                    b.Navigation("User");
+                    b.Navigation("Test");
                 });
 
             modelBuilder.Entity("Api.Models.Test", b =>

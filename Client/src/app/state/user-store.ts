@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core"
 import { patchState, signalStore, type, withMethods, withState } from "@ngrx/signals"
 import { addEntity, removeEntity, setAllEntities, updateEntities, withEntities } from "@ngrx/signals/entities"
-import { Question, ResultItem, Test } from "models"
+import { Question, ResultItem, Test, TestResult } from "models"
 
 type UserState = {
-    mode: 'select' | 'testing',
+    mode: UserMode,
     tests: Test[],
     testToken: string
     startedTest: Test 
-    resultItems: Array<ResultItem>
+    testResult: TestResult
 }
 
 const initialState: UserState = {
@@ -23,8 +23,20 @@ const initialState: UserState = {
         groupTests: [],
         userId: 0
     },
-    resultItems:[]
+    testResult: {
+        id: 0,
+        userId: 0,
+        testId: 0,
+        dateTime: "",
+        total: 0,
+        answered: 0,
+        right: 0,
+        complete: false,
+        results: []
+    }
 }
+
+type UserMode = 'select' | 'testing' | 'result'
 
 @Injectable({ providedIn: 'root' })
 export class UserStore extends signalStore(
@@ -40,7 +52,7 @@ export class UserStore extends signalStore(
         deleteQuestion(id: number): void {
             patchState(store, removeEntity(id, {collection: 'questions'}));
         },
-        updateMode(mode: 'select' | 'testing'):  void {
+        updateMode(mode: UserMode):  void {
             patchState(store, {mode: mode});
         },
         updateTestToken(testToken: string): void{
@@ -49,9 +61,18 @@ export class UserStore extends signalStore(
         updateState(state: Partial<UserState>): void {
             patchState(store, {...state});
         },
-        addResultItem(result: ResultItem): void {
-            patchState(store, {resultItems: [...store.resultItems(), result]})
+        setTestResult(testResult: TestResult) {
+            patchState(store, { testResult: testResult });
         },
+        updateTestResult(testResult: Partial<TestResult>){
+            patchState(store, {testResult: {...store.testResult(), ...testResult}})
+        },
+        addResultItem(result: ResultItem): void {
+            patchState(store, {testResult: {...store.testResult(), results: [...store.testResult().results, result]}})
+        },
+        resetState(): void {
+            patchState(store, initialState);
+        }
 
     }))
 ) { };

@@ -23,6 +23,7 @@ import {
   Component, computed, effect, inject, linkedSignal, model, signal, viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users-list',
@@ -39,6 +40,7 @@ export class UsersList {
   store = inject(AdministratorStore);
   appStore = inject(ApplicationStore);
   service = inject(UserService);
+  router = inject(Router);
 
   dialogService = inject(DialogService);
   ref: DynamicDialogRef | null = null;
@@ -59,7 +61,13 @@ export class UsersList {
   items = computed<MenuItem[]>(() => {
     if (this.appStore.user()?.role == "Administrator") {
       return [
-        { label: "Просмотр результатов", icon: "pi pi-list-check" },
+        {
+          label: "Просмотр результатов",
+          icon: "pi pi-list-check",
+          command: (_) => {
+            this.router.navigate(['/admin/user-results/', this.selectedUser()?.id])
+          }
+        },
         { separator: true },
         {
           label: 'Редактировать', icon: 'pi pi-user-edit', iconStyle: { "color": "var(--color-green-600)" },
@@ -74,7 +82,11 @@ export class UsersList {
       ];
     } else {
       return [
-        { label: "Просмотр результатов", icon: "pi pi-list-check" },
+        {
+          label: "Просмотр результатов", icon: "pi pi-list-check", command: () => {
+            this.router.navigate(['/admin/user-results/', this.selectedUser()?.id])
+          }
+        },
         { separator: true },
         { label: 'Сменить пароль', icon: 'pi pi-key', iconStyle: { "color": "var(--color-blue-600)" }, },
       ];
@@ -84,7 +96,7 @@ export class UsersList {
 
   constructor() {
     effect(() => {
-      let groups = this.store.groupsEntities().filter(f => this.store.groupsEntities().findIndex(i => i.id === f.parentId)===-1)
+      let groups = this.store.groupsEntities().filter(f => this.store.groupsEntities().findIndex(i => i.id === f.parentId) === -1)
       let nodes = this.buildTree(groups);
       this.treeNodes.set(nodes);
     })

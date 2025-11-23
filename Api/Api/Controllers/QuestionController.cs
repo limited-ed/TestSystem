@@ -10,7 +10,7 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Administrator, Editior")]
+    [Authorize(Roles = "Administrator, Editor")]
     public class QuestionController(QuestionRepository repository, CategoriesRepository categoriesRepository)
         : Controller
     {

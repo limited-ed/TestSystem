@@ -63,10 +63,21 @@ public class JwtUtils
             identity.AddClaim(new Claim(claim.Key, claim.Value.ToString()));
         }
 
-        return GenerateJwtToken(identity);
+        return GenerateJwtToken(identity, DateTime.UtcNow.AddDays(7));
+    }
+    
+    public string GenerateJwtToken(Dictionary<string, object> claims, DateTime expires)
+    {
+        var identity = new ClaimsIdentity();
+        foreach (var claim in claims)
+        {
+            identity.AddClaim(new Claim(claim.Key, claim.Value.ToString()));
+        }
+
+        return GenerateJwtToken(identity, expires);
     }
 
-    public string GenerateJwtToken(ClaimsIdentity identity)
+    public string GenerateJwtToken(ClaimsIdentity identity, DateTime expires)
     {
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -77,7 +88,7 @@ public class JwtUtils
             Subject = identity,
             Audience = _jwtKey.ValidAudience,
             Issuer = _jwtKey.ValidIssuer,
-            Expires = DateTime.UtcNow.AddDays(7),
+            Expires = expires,
             SigningCredentials =
                 new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
             Claims = identity.Claims.ToDictionary(t => t.Type, v => v.Value as object)

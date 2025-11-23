@@ -2,19 +2,19 @@
     <div class="grid grid-cols-[1fr_3fr] grid-rows-5 items-center gap-4">
 
         <label for="username">Имя пользователя</label>
-        <input pInputText id="username" [control]="userForm.fullname"/>
+        <input pInputText id="username"[field]="userForm.fullname"/>
 
         <label for="login">Логин</label>
-        <input pInputText id="login" [control]="userForm.login"/>
+        <input pInputText id="login"[field]="userForm.login"/>
 
         <label for="username">Пароль</label>
-        <input pInputText id="password" type="password" [control]="userForm.password"/>
+        <input pInputText id="password" type="password"[field]="userForm.password"/>
 
         <label for="confirmation">Проверка пароля</label>
-        <input pInputText id="confirmation" type="password"  [control]="userForm.confirmation"/>
+        <input pInputText id="confirmation" type="password" [field]="userForm.confirmation"/>
 
         <label for="role">Роль</label>
-        <role-selector [items]="roles" [control]="userForm.role"/>
+        <role-selector [items]="roles"[field]="userForm.role"/>
 
     </div>
 </form>

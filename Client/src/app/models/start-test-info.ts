@@ -1,8 +1,9 @@
-import { Question, Test } from "models"
+import { Question, Test, TestResult } from "models"
 
 
 export interface StartTestInfo {
     token: string,
-    test: Test
+    test: Test,
+    testResult: TestResult,
     questions: Question[]
 }

@@ -1,6 +1,6 @@
 import { Component, input, linkedSignal, signal } from '@angular/core';
 import { inject } from '@angular/core/primitives/di';
-import { Control, form, required } from '@angular/forms/signals';
+import { Field, form, required } from '@angular/forms/signals';
 import { Category } from 'models';
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialog, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -9,7 +9,7 @@ import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-category-edit',
-  imports: [ButtonModule, InputTextModule, SelectModule, Control],
+  imports: [ButtonModule, InputTextModule, SelectModule, Field],
   templateUrl: './category-edit.html',
   styleUrl: './category-edit.css'
 })

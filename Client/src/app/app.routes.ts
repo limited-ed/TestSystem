@@ -23,12 +23,13 @@ export const routes: Routes = [
 
                 ]
             },
-            { path: 'results', loadComponent: () => import('admin/result/results-list/results-list').then(c => c.ResultsList) }
+            { path: 'results', loadComponent: () => import('admin/result/results-list/results-list').then(c => c.ResultsList) },
+            { path: 'user-results/:id', loadComponent: () => import('admin/user/user-result/user-result').then(c => c.UserResult) }
 
         ]
     },
     { path: "user", loadComponent: () => import('user/user-dashboard/user-dashboard').then(c => c.UserDashboard), canActivate: [canActivateUser] },
     { path: 'test', loadComponent: () => import('user/test-component/test-component').then(c => c.TestComponent), canActivate: [canActivateTest], },
-    { path: 'result', loadComponent: () => import('user/result-component/result-component'). then(c => c.ResultComponent)}
+    { path: 'result', loadComponent: () => import('user/result-component/result-component').then(c => c.ResultComponent) }
 
 ];

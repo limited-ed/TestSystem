@@ -47,7 +47,7 @@ public class GroupRepository(DataContext context) : Controller
         {
             var result = new List<Group>();
             result.Add(await context.Groups.FirstAsync(w => w.Id == user.GroupId));
-            result.AddRange(await GetChildGroupsAsync(user.GroupId, true));
+            result.AddRange(await GetChildGroupsAsync(user.GroupId, false));
             return result;
         }
 

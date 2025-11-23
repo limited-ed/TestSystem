@@ -16,7 +16,7 @@
         </div>
         <div class="grid grid-cols-2">
             <div class="p-4">
-                Вопрос {{currentNumQuestion()+1}} / {{questionsCount()}}
+                Вопрос {{currentNumQuestion()+1}} / {{userStore.testResult().total}}
             </div>
             <div class="flex justify-end items-center text-lg px-10">
                 Время: <span class="font-bold pl-2" [ngClass]="{'color-red-600':currentTimer()>total/4}">{{timeInMinutes()}}</span>
@@ -29,14 +29,15 @@
                 {{currentQuestion().content}}
             </div>
             <div class="flex flex-col gap-4 px-10 text-xl">
-                @for (q of shuffled(); track q.id) {
+                @for (i of shuffled(); track i) {
+                @let a = currentQuestion().answers[i];
                 <div class="checkbox-wrapper-28">
-                    <input [id]="'a'+$index" type="checkbox" class="promoted-input-checkbox" />
+                    <input [id]="'a'+$index" type="checkbox" class="promoted-input-checkbox" [field]="answersForm.items[i].checked">
                     <svg>
                         <use xlink:href="#checkmark-28" />
                     </svg>
                     <label [for]="'a'+$index">
-                        {{q.content}}
+                        {{a.content}}
                     </label>
                     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
                         <symbol id="checkmark-28" viewBox="0 0 24 24">
