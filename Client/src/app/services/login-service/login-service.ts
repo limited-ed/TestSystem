@@ -3,7 +3,8 @@ import { inject, Injectable } from '@angular/core';
 import { AuthModel } from 'models/auth/authModel';
 import { ApplicationStore } from 'state/application-store';
 
-import {ApiConfiguration as conf} from 'app.config';
+
+import { API_CONFIG } from 'app.config.api';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,10 @@ export class LoginService {
   
   http = inject (HttpClient);
   store = inject(ApplicationStore);
+    conf = inject(API_CONFIG);
 
   public login(model: AuthModel) {
-    return this.http.post(conf.apiHost+conf.apiEndpoints['login'], model)
+    return this.http.post(this.conf.apiHost+this.conf.apiEndpoints['login'], model)
   }
 
 }

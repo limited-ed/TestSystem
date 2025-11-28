@@ -3,4 +3,5 @@ export interface Group {
     title: string;
     parentId: number;
     canDelete: boolean;
+    expanded: boolean
 }

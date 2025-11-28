@@ -9,7 +9,7 @@ public class ResultItemsRepository(DataContext context)
 
     public async Task<ResultItem> Add(ResultItem item)
     {
-        if (!context.ResultItems.Any(a => a.QuestionId == item.QuestionId && a.TestId == item.TestId))
+        if (!context.ResultItems.Any(a => a.QuestionId == item.QuestionId && a.TestResultId == item.TestResultId))
         {
             context.ResultItems.Add(item);
             await context.SaveChangesAsync();

@@ -1,20 +1,26 @@
 import { Provider } from "@angular/core";
 import { ActivatedRouteSnapshot, DetachedRouteHandle, RouteReuseStrategy } from "@angular/router";
 
-interface StoredRoute{
+interface StoredRoute {
     route: ActivatedRouteSnapshot;
     handle: DetachedRouteHandle
 }
 
+interface IRouteData {
+    reuse: boolean
+}
+
 export class AppRouteReuseStrategy implements RouteReuseStrategy {
-    private storeCache:Record<string, StoredRoute> = {}
+    private storeCache: Record<string, StoredRoute> = {}
 
     shouldDetach(route: ActivatedRouteSnapshot): boolean {
-        return true;
+        let ret = !!(route.data as IRouteData).reuse
+        return ret;
+
     }
     store(route: ActivatedRouteSnapshot, handle: DetachedRouteHandle | null): void {
         let path = this.getFullPath(route);
-        if (handle && route.url.findIndex(f=>f.path.includes('test'))===-1) this.storeCache[path] = {route, handle}
+        if (handle && route.url.findIndex(f => f.path.includes('test')) === -1) this.storeCache[path] = { route, handle }
     }
     shouldAttach(route: ActivatedRouteSnapshot): boolean {
         let path = this.getFullPath(route);
@@ -23,7 +29,7 @@ export class AppRouteReuseStrategy implements RouteReuseStrategy {
     retrieve(route: ActivatedRouteSnapshot): DetachedRouteHandle | null {
         let path = this.getFullPath(route);
         if (!this.storeCache[path]) return null;
-        return  this.storeCache[path].handle;
+        return this.storeCache[path].handle;
     }
 
     shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {

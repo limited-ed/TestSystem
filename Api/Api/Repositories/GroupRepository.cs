@@ -4,6 +4,7 @@ using Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Api.Repositories;
 
 public class GroupRepository(DataContext context) : Controller
@@ -15,11 +16,7 @@ public class GroupRepository(DataContext context) : Controller
 
     public async Task<IEnumerable<Group>> GetChildGroupsAsync(int groupId, bool setParentNull = false)
     {
-        var groups = await context.Groups.Where(g => g.ParentId == groupId).ToListAsync();
-        /*  if (groups.FirstOrDefault()?.ParentId==0)
-          {
-              return await GetAllAsync();
-          }*/
+        var groups = await context.Groups.Where(g => g.ParentId == groupId).AsNoTracking().ToListAsync();
         if (setParentNull)
         {
             groups.ForEach(f=>f.ParentId=0);
@@ -42,17 +39,82 @@ public class GroupRepository(DataContext context) : Controller
 
     public async Task<IEnumerable<Group>> GetGroupsForUser(int userId)
     {
-        var user = context.Users.FirstOrDefault(f => f.Id == userId);
+        var user = context.Users.AsNoTracking().FirstOrDefault(f => f.Id == userId);
         if (user != null)
         {
             var result = new List<Group>();
-            result.Add(await context.Groups.FirstAsync(w => w.Id == user.GroupId));
-            result.AddRange(await GetChildGroupsAsync(user.GroupId, false));
+            IQueryable<Group> root; 
+            if (user.GroupId == 1)
+            {
+                root=context.Groups.Where(w => w.ParentId == 0).AsNoTracking();
+            }
+            else
+            {
+               root = context.Groups.Where(w => w.Id == user.GroupId).AsNoTracking();
+            }
+
+            result.AddRange(await root.ToListAsync());
+            foreach (var g in root)
+            {
+                result.AddRange(await GetChildGroupsAsync(g.Id, false));
+            }
+
             return result;
         }
 
         return null;
     }
+
+    public async Task<Group> AddGroup(Group group, int userId)
+    {
+        var groups = await GetGroupsForUser(userId);
+        if (!groups.Any(a => a.Id == group.ParentId))
+        {
+            throw new ArgumentException();
+        }
+        
+        if (group.Id != 0)
+        {
+            throw new ArgumentException("Id mas be 0");
+        }
+
+        
+        context.Add(group);
+        await context.SaveChangesAsync();
+        return group;
+    }
+
+    public async Task<Group> UpdateGroup(Group group, int userId)
+    {
+        await CheckUserForGroup(group, userId);
+
+        context.Entry(group).State = EntityState.Modified;
+        //context.Update(group);
+        await context.SaveChangesAsync();
+        return group;
+    }
+
+
+    public async Task<bool> Delete(int id, int userId)
+    {
+        var group = await context.Groups.FirstAsync(f=>f.Id == id);
+        await CheckUserForGroup(group, userId);
+        if (context.Groups.Any(a => a.ParentId == id))
+        {
+            throw new InvalidOperationException("Невозможно удалить непустую группу");
+        }
+        context.Remove(group);
+        await context.SaveChangesAsync();
+        return true;
+    }
     
+    private async Task CheckUserForGroup(Group group, int userId)
+    {
+        var groups = await GetGroupsForUser(userId);
+        if (!groups.Any(a => a.Id == group.Id))
+        {
+            throw new ArgumentException();
+        }
+    }
     
 }

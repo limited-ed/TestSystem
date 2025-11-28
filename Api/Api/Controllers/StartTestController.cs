@@ -52,7 +52,7 @@ public class StartTestController(TestRepository testRepository, QuestionReposito
 
         var options = new JsonSerializerOptions()
         {
-            TypeInfoResolver = new CustomTypeInfoResolver(),
+            TypeInfoResolver = new IgnoreFieldTypeInfoResolver([new(){Type = typeof(Answer), IgnoreFields = ["isRight"]}]),
             ReferenceHandler = ReferenceHandler.IgnoreCycles,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,

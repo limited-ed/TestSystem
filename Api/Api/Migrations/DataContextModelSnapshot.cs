@@ -148,21 +148,16 @@ namespace Api.Migrations
                     b.Property<bool>("Right")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TestId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TestResultId")
+                    b.Property<int>("TestResultId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("TestId");
-
                     b.HasIndex("TestResultId");
 
-                    b.HasIndex("Id", "QuestionId", "TestId");
+                    b.HasIndex("Id", "QuestionId", "TestResultId");
 
                     b.ToTable("ResultItems");
                 });
@@ -348,19 +343,15 @@ namespace Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("User", "Test")
-                        .WithMany()
-                        .HasForeignKey("TestId")
+                    b.HasOne("Api.Models.TestResult", "TestResult")
+                        .WithMany("Results")
+                        .HasForeignKey("TestResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Api.Models.TestResult", null)
-                        .WithMany("Results")
-                        .HasForeignKey("TestResultId");
-
                     b.Navigation("Question");
 
-                    b.Navigation("Test");
+                    b.Navigation("TestResult");
                 });
 
             modelBuilder.Entity("Api.Models.Test", b =>
@@ -402,7 +393,7 @@ namespace Api.Migrations
                         .IsRequired();
 
                     b.HasOne("User", "User")
-                        .WithMany()
+                        .WithMany("TestResults")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -415,9 +406,9 @@ namespace Api.Migrations
             modelBuilder.Entity("User", b =>
                 {
                     b.HasOne("Api.Models.Group", "Group")
-                        .WithMany()
+                        .WithMany("Users")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -431,6 +422,8 @@ namespace Api.Migrations
             modelBuilder.Entity("Api.Models.Group", b =>
                 {
                     b.Navigation("GroupTests");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Api.Models.Question", b =>
@@ -448,6 +441,11 @@ namespace Api.Migrations
             modelBuilder.Entity("Api.Models.TestResult", b =>
                 {
                     b.Navigation("Results");
+                });
+
+            modelBuilder.Entity("User", b =>
+                {
+                    b.Navigation("TestResults");
                 });
 #pragma warning restore 612, 618
         }

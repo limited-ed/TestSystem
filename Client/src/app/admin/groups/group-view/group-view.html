@@ -1,0 +1,19 @@
+<p-confirmdialog />
+<div class="flex flex-col p-2 h-full">
+    <div class="flex pb-2 border-b border-b-primary-600 items-center justify-items-end gap-4">
+            <p-button label="Редактировать" icon="pi pi-user-plus" [disabled]="!selectedGroup()"
+                (click)="editGroup(selectedGroup()?.data)" size="small"></p-button>
+            <p-button label="Добавить" icon="pi pi-user-plus" [disabled]="!selectedGroup()"
+                (click)="editGroup(undefined)" size="small" severity="success"></p-button>
+            <p-button label="Удалить" icon="pi pi-trash" size="small" severity="danger" variant="outlined" [disabled]="!selectedGroup()" (click)="deleteGroup()"/>
+    </div>
+    <div class="flex w-full h-full overflow-auto">
+        <div class="w-[100%] h-[calc(100%-52px)] overflow-auto">
+            <p-tree [value]="nodes()" class="w-full md:w-[30rem]" [(selection)]="selectedGroup" selectionMode="single" (onNodeExpand)="nodeExpand($event)" (onNodeCollapse)="nodeCollapse($event)">
+                <ng-template #empty>
+                    Нет данных.
+                </ng-template>
+            </p-tree>
+        </div>
+    </div>
+</div>

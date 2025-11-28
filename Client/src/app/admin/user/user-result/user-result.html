@@ -1,1 +1,38 @@
-<p>user-result works!</p>
+<p-menu #menu [model]="items" [popup]="true" />
+@if (!!results.value()){
+<div class="w-[100%] h-[calc(100%)] flex flex-col">
+    <p-table [value]="results.value()??[]" stripedRows class="h-full" [scrollable]="true" scrollHeight="100%"
+        size="small" class="grow-1">
+        <ng-template #header>
+
+            <tr>
+                <th class="w-[72px]">
+
+                </th>
+                <th class="w-[20%]">Дата</th>
+                <th class="w-[40%]">Тест</th>
+                <th class="">Всего</th>
+                <th class="">Верных</th>
+                <th class="">Завершен</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-result>
+            <tr>
+                <td>
+                    <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
+                        (click)="menuClick($event, result)" />
+                </td>
+                <td>{{ result.dateTime | date: 'dd.MM.yyyy HH:MM' }}</td>
+                <td>{{ result.test.title }}</td>
+                <td>{{ result.total }}</td>
+                <td>{{ result.right }}</td>
+                <td>{{ result.complete?"Завершен":"" }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+  <!--  <p-paginator  rows="20" [totalRecords]="120"
+        [rowsPerPageOptions]="[10, 20, 30]" />-->
+
+</div>
+
+}

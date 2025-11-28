@@ -34,6 +34,9 @@ export class AdministratorStore extends signalStore(
         updateGroup(entity: Group) {
             patchState(store, setEntity(entity, { collection: 'groups' }));
         },
+        deleteGroup(id: number){
+            patchState(store, removeEntity(id,{collection: 'groups'}));
+        },
         updateAllCategories(entities: Category[]): void {
             patchState(store, setAllEntities(entities, { collection: 'categories' }));
         },

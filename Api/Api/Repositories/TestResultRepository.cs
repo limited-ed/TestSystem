@@ -4,16 +4,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Repositories;
 
-public class TestResultRepository(DataContext context)
+public class TestResultRepository(DataContext context, GroupRepository groupRepository)
 {
     public async Task<TestResult> GetById(int id)
     {
         return await context.TestResults.FirstAsync(f => f.Id == id);
     }
-    
+
+    public async Task<IQueryable<TestResult>> GetAll(int userId, DateTime from, DateTime to)
+    {
+        var groups = (await groupRepository.GetGroupsForUser(userId)).Select(s=>s.Id);
+        return context.TestResults.Include(i => i.Results).ThenInclude(t => t.Question).ThenInclude(q => q.Answers)
+            .Include(i => i.Test).Include(i => i.User).ThenInclude(i=>i.Group).OrderByDescending(o => o.Id)
+            .Where(w => groups.Contains(w.User.GroupId) && w.DateTime>=from && w.DateTime<to);
+    }
+
     public IQueryable<TestResult> GetForUser(int userId)
     {
-        return context.TestResults.Where(w => w.UserId == userId);
+        return context.TestResults.Include(i => i.Results).ThenInclude(t => t.Question).ThenInclude(q => q.Answers)
+            .Include(i => i.Test).OrderByDescending(o => o.Id)
+            .Where(w => w.UserId == userId);
     }
 
     public async Task<TestResult> Add(TestResult testResult)
@@ -54,6 +64,7 @@ public class TestResultRepository(DataContext context)
 
 
             resultItem.Right = isRight;
+            resultItem.TestResultId = testResult.Id;
             context.ResultItems.Add(resultItem);
         }
 
@@ -62,7 +73,7 @@ public class TestResultRepository(DataContext context)
         old.Right = testResult.Results.Count(w => w.Right);
 
         await context.SaveChangesAsync();
-        
+
         return old;
     }
 }

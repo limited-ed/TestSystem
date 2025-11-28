@@ -1,4 +1,5 @@
 import { Component, effect, inject, linkedSignal, model, OnInit } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ThemeSwitcher } from 'admin/dashboard';
@@ -56,6 +57,12 @@ export class UserDashboard implements OnInit {
   constructor() {
 
   }
+
+  testForUser=rxResource({
+    params: this.appStore.user,
+    stream:(param)=>this.testSrv.getForUser(param.params!.id)
+  })
+
   ngOnInit(): void {
     let userid = this.appStore.user()?.id;
     if (!!userid) {

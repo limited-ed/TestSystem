@@ -30,6 +30,7 @@ builder.Services.AddControllers().AddJsonOptions(o =>
     o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     o.JsonSerializerOptions.WriteIndented = true;
+    o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
 builder.Services.AddAuthentication(options =>
@@ -81,7 +82,7 @@ if (app.Environment.IsDevelopment())
 
 }
 
- app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -32,7 +32,8 @@ const initialState: UserState = {
         answered: 0,
         right: 0,
         complete: false,
-        results: []
+        results: [],
+        test: undefined
     }
 }
 

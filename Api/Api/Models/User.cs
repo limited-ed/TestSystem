@@ -11,8 +11,8 @@ public class User
     public string Fullname { get; set; }
     public UserRole Role { get; set; }
     public int GroupId { get; set; }
-    [JsonIgnore]
     public Group Group { get; set; }
-    public bool CanDelete { get; set; } 
+    public bool CanDelete { get; set; }
+    public ICollection<TestResult> TestResults { get; set; }
         
 }

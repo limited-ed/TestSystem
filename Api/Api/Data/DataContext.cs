@@ -31,10 +31,13 @@ public class DataContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>().HasIndex(i => new { i.Id, i.Login });
+        modelBuilder.Entity<User>().HasMany(m => m.TestResults).WithOne(o => o.User).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Group>().HasMany(m => m.Users).WithOne(o => o.Group).OnDelete(DeleteBehavior.NoAction);
         modelBuilder.Entity<GroupTest>().HasKey(k => new { k.TestId, k.GroupId });
         modelBuilder.Entity<GroupTest>().HasIndex(i => new { i.TestId, i.GroupId });
         modelBuilder.Entity<GroupTest>().HasOne(o => o.Group).WithMany(m => m.GroupTests).HasForeignKey(o => o.GroupId);
         modelBuilder.Entity<GroupTest>().HasOne(o => o.Test).WithMany(m => m.GroupTests).HasForeignKey(o => o.TestId);
+        
     }
 
     internal async Task Seed()
@@ -44,13 +47,9 @@ public class DataContext : DbContext
             Groups.Add(new Group() { Id = 1, Title = "Администраторы", ParentId = 0, CanDelete = false });
             Groups.Add(new Group() { Id = 2, Title = "Группа 1", ParentId = 0 });
             Groups.Add(new Group() { Id = 3, Title = "Подгруппа", ParentId = 2 });
-
             Groups.Add(new Group() { Id = 4, Title = "Группа 2", ParentId = 0 });
             await SaveChangesAsync();
-            for (int i = 1; i <= 30; i++)
-            {
-                Groups.Add(new Group() { ParentId = 2, Title = $"Подгруппа {i}", CanDelete = false });
-            }
+
 
             await SaveChangesAsync();
         }

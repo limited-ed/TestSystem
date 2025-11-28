@@ -13,18 +13,19 @@
             </p-splitbutton>
         </div>
     </div>
-    <div class="grow-1 grid items-center justify-center login_back">
-        <div class="w-150  m-auto flex flex-col gap-4 rounded-2xl bg-white p-6 border-1 border-gray-400 items-center dark:bg-surface-800">
+    <div class="absolute inset-0 z-0 back-sq "></div>
+    <div class="grow-1 grid items-center justify-center ">
+        <div class="w-150  m-auto flex flex-col gap-4 rounded-2xl bg-white p-6 border-2 border-primary-500 items-center dark:bg-surface-800 z-10">
             <div class="text-2xl font-semibold">
                 Добро пожаловать
             </div>
             <div>
                 Чтобы приступить к тестированию, выберите тест
             </div>
-            <p-select [options]="userStore.tests()" optionLabel="title" optionValue="id" [(ngModel)]="selectedTest"
+            <p-select [options]="testForUser.value()" optionLabel="title" optionValue="id" [(ngModel)]="selectedTest"
                 placeholder="Выберите тест" class="" fluid />
             <div>
-                <p-button label="Начать" variant="outlined"  styleClass="w-60" [disabled]="!selectedTest()" (click)="startTest()"/>
+                <p-button label="Начать"   styleClass="w-60" [disabled]="!selectedTest()" (click)="startTest()"/>
             </div>
         </div>
     </div>

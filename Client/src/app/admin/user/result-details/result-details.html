@@ -1,0 +1,47 @@
+<div class="h-[calc(100%)] flex flex-col py-2 gap-4">
+    <div class="border-b-2 border-primary-700 pb-2 flex gap-4">
+        <p-button icon="pi pi-times" severity="secondary" [outlined]="true" (click)="back()" label="Закрыть"/>
+        <p-selectbutton [options]="stateOptions()" [(ngModel)]="showValue" optionLabel="label" optionValue="value"
+            aria-labelledby="basic" />
+    </div>
+    <div class="grid grid-cols-[150px_auto] grid-rows-5 [&>*:nth-child(odd)]:font-semibold pl-4">
+        <span>Тест</span><span>{{testResult().test?.title}}</span>
+        <span>Время</span><span>{{testResult().dateTime | date: 'dd.MM.yyyy HH:MM'}}</span>
+        <span>Всего вопросов</span><span>{{testResult().total}}</span>
+        <span>Верных ответов</span><span>{{testResult().right}}</span>
+        <span>% верных</span><span>{{testResult().right/testResult().total*100|number}} %</span>
+
+    </div>
+    <div class="grow-1 overflow-auto">
+        <p-accordion [multiple]="true">
+            @for(res of results(); track res.id){
+            <p-accordion-panel [value]="$index">
+                <p-accordion-header>
+                    <div class="flex flex-col">
+                        <div [class]="res.right?'text-green-600 q-row':'text-red-600'">Вопрос #{{$index}}</div>
+                        <p class="q-row">{{res.question?.content}}</p>
+                    </div>
+
+                </p-accordion-header>
+                <p-accordion-content>
+                    <div class="flex flex-col gap-2">
+                        @for(a of res.question?.answers; track a.id){
+                        <div class="flex items-center gap-4">
+                            <span class="w-6 h-6 border-1 rounded-sm flex items-center justify-center"
+                                [class.border-green-600]="a.isRight" [class.border-red-600]="!a.isRight">
+                                @if(res.answers.includes(a.id)){
+                                <i class="pi pi-check" [class.text-green-600]="a.isRight"
+                                    [class.text-red-600]="!a.isRight" style="font-weight: bold;"></i>
+                                }
+                            </span>
+                            <div>{{a.content}}</div>
+                        </div>
+                        }
+                    </div>
+                </p-accordion-content>
+            </p-accordion-panel>
+            }
+
+        </p-accordion>
+    </div>
+</div>
