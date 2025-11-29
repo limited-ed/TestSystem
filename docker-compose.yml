@@ -1,5 +1,4 @@
 services:
-
   api-server:
     container_name: 'api-server'
     image: 'api-server'
