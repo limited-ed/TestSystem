@@ -18,7 +18,7 @@
             <p-accordion-panel [value]="$index">
                 <p-accordion-header>
                     <div class="flex flex-col">
-                        <div [class]="res.right?'text-green-600 q-row':'text-red-600'">Вопрос #{{$index}}</div>
+                        <div [class]="res.right?'text-green-600 q-row':'text-red-600'">Вопрос #{{$index+1}}</div>
                         <p class="q-row">{{res.question?.content}}</p>
                     </div>
 

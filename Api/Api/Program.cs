@@ -20,8 +20,10 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 var connection = configuration.GetSection("Data:ConnectionString").Value;
+var connectionpg = builder.Configuration.GetSection("Data:PostgreSQL").Value;
 
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connection));
+builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionpg));
+//builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connection));
 
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
