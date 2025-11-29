@@ -4,7 +4,7 @@ services:
     image: 'api-server'
     build:
       context: .
-      dockerfile: Api/dockerfile
+      dockerfile: Api/Api/dockerfile
     ports:
      - "8080:8080"
     depends_on:
@@ -27,33 +27,12 @@ services:
                 
   postgres:
     container_name: 'db-postgres'
-    image: postgres
+    image: postgres:17.7
     environment:
       # change this for a "real" app!
       POSTGRES_PASSWORD: 1
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - lms-network
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres_user -d postgres_db" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    restart: unless-stopped
-
-  nginx-entrypoint:
-    image: nginx
-    hostname: nginx-entrypoint
-    container_name: nginx-entrypoint
-    restart: unless-stopped
-    environment:
-      TZ: "Europe/Moscow"
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - pgdata:/var/lib/postgresql
     networks:
       - lms-network
 

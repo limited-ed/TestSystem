@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -24,8 +25,8 @@ public class TestResultController(TestResultRepository repository) : Controller
             return BadRequest("Range is not set");
         }
 
-        var fromDate = DateTime.Parse(from);
-        var toDate = DateTime.Parse(to).AddDays(1);
+        var fromDate = DateTime.Parse(from, new CultureInfo("ru-RU")).ToUniversalTime();
+        var toDate = DateTime.Parse(to,new CultureInfo("ru-RU")).AddDays(1).ToUniversalTime();
         
         var userid = ClaimUtils.GetClaimAsInt(User.Claims, "userId");
         var options = new JsonSerializerOptions()

@@ -1,5 +1,9 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Api.Models;
 using Api.Models.Auth;
+using Api.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +26,7 @@ public class DataContext : DbContext
 
     public DataContext()
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
     }
 
     public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -46,11 +51,6 @@ public class DataContext : DbContext
         {
             Groups.Add(new Group() { Id = 1, Title = "Администраторы", ParentId = 0, CanDelete = false });
             Groups.Add(new Group() { Id = 2, Title = "Группа 1", ParentId = 0 });
-            Groups.Add(new Group() { Id = 3, Title = "Подгруппа", ParentId = 2 });
-            Groups.Add(new Group() { Id = 4, Title = "Группа 2", ParentId = 0 });
-            await SaveChangesAsync();
-
-
             await SaveChangesAsync();
         }
 
@@ -69,49 +69,36 @@ public class DataContext : DbContext
             Users.Add(new()
             {
                 Id = 3, CanDelete = false, Fullname = "User", Login = "user", Password = MD5Utils.CreateMD5("1"),
-                Role = UserRole.User, GroupId = 3
-            });
-            Users.Add(new()
-            {
-                Id = 4, CanDelete = false, Fullname = "User2", Login = "user2", Password = MD5Utils.CreateMD5("1"),
-                Role = UserRole.User, GroupId = 3
+                Role = UserRole.User, GroupId = 2
             });
             await SaveChangesAsync();
         }
 
         if (!Categories.Any())
         {
-            Categories.Add(new() { Id = 1, Title = "Охрана труда", UserId = 1 });
-            Categories.Add(new() { Id = 2, Title = "Вопросы Осмотрщик вагонов", UserId = 2 });
-            Categories.Add(new() { Id = 3, Title = "Безопасность на жд путях", UserId = 2 });
-
+            Categories.Add(new() { Id = 1, Title = "Вопросы для проверки", UserId = 1 });
             await SaveChangesAsync();
         }
-
+        
         if (!Questions.Any())
         {
-            for (int i = 1; i < 20; i++)
+            string jsonString = File.ReadAllText("/app/testfile.json");
+            var options = new JsonSerializerOptions()
             {
-                var quest = new Question()
-                {
-                    Id = i, CategoryId = i - (3 * ((i - 1) / 3)),
-                    Content =
-                        $"Вопрос {i} Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                    Answers = new List<Answer>()
-                    {
-                        new() { Content = "Ответ 1 v", IsRight = true },
-                        new() { Content = "Ответ 2", IsRight = false },
-                        new() { Content = "Ответ 3 v", IsRight = true },
-                        new() { Content = "Ответ 4", IsRight = false }
-                    }
-                };
-
-                Questions.Add(quest);
-            }
+                TypeInfoResolver = new DefaultJsonTypeInfoResolver(),
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true
+            };
+            var data = JsonSerializer.Deserialize<Question[]>(jsonString, options);
+            Questions.AddRange(data);
 
             await SaveChangesAsync();
         }
-
+/*
         if (!Tests.Any())
         {
             Tests.Add(new()
@@ -125,6 +112,6 @@ public class DataContext : DbContext
                 }
             });
             await SaveChangesAsync();
-        }
+        } */
     }
 }

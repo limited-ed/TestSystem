@@ -43,17 +43,17 @@ public class GroupRepository(DataContext context) : Controller
         if (user != null)
         {
             var result = new List<Group>();
-            IQueryable<Group> root; 
+            IEnumerable<Group> root; 
             if (user.GroupId == 1)
             {
-                root=context.Groups.Where(w => w.ParentId == 0).AsNoTracking();
+                root=context.Groups.Where(w => w.ParentId == 0).AsNoTracking().ToList();
             }
             else
             {
-               root = context.Groups.Where(w => w.Id == user.GroupId).AsNoTracking();
+               root = context.Groups.Where(w => w.Id == user.GroupId).AsNoTracking().ToList();
             }
 
-            result.AddRange(await root.ToListAsync());
+            result.AddRange(root);
             foreach (var g in root)
             {
                 result.AddRange(await GetChildGroupsAsync(g.Id, false));
