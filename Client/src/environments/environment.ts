@@ -1,4 +1,4 @@
 export const environment = {
-    apiServer: 'http://api-server:8080',
+    apiServer: 'https://api.kortex-lms.ru',
     mode: "production"
 };

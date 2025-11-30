@@ -59,16 +59,16 @@ public class DataContext : DbContext
             Users.Add(new()
             {
                 Id = 1, CanDelete = false, Fullname = "Administrator", Login = "admin",
-                Password = MD5Utils.CreateMD5("1"), Role = UserRole.Administrator, GroupId = 1
+                Password = MD5Utils.CreateMD5("wt4pk5w4"), Role = UserRole.Administrator, GroupId = 1
             });
             Users.Add(new()
             {
-                Id = 2, CanDelete = false, Fullname = "Editor", Login = "editor", Password = MD5Utils.CreateMD5("1"),
+                Id = 2, CanDelete = true, Fullname = "Editor", Login = "editor", Password = MD5Utils.CreateMD5(""),
                 Role = UserRole.Editor, GroupId = 2
             });
             Users.Add(new()
             {
-                Id = 3, CanDelete = false, Fullname = "User", Login = "user", Password = MD5Utils.CreateMD5("1"),
+                Id = 3, CanDelete = true, Fullname = "User", Login = "user", Password = MD5Utils.CreateMD5("wt4pk5w4"),
                 Role = UserRole.User, GroupId = 2
             });
             await SaveChangesAsync();

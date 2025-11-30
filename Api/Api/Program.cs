@@ -59,11 +59,6 @@ builder.Services.AddTransient<JwtUtils>();
 builder.Services.Configure<JWTKey>(builder.Configuration.GetSection("JWTKey"));
 builder.Services.AddAuthorization(options => { });
 builder.Services.AddRepositories();
-builder.Services.AddReverseProxyOpyions(options =>
-{
-    options.AddInclude("", "http://localhost:4000");
-    options.AddExclude("/api");
-});
 builder.Services.AddHostedService<NodeBackgroundService>();
 
 var app = builder.Build();
@@ -81,10 +76,11 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-
+    
 }
 
-app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(c => c.WithOrigins(["https://kortex-lms.ru"]).AllowAnyMethod().AllowAnyHeader());
+
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
