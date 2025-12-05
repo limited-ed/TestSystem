@@ -50,6 +50,8 @@ export class TestView {
     return t ?? { id: 0, parts: new Array<TestPart>(), timer: 0, title: 'Название теста' } as Test;
   });
 
+  parts = signal<TestPart[]>(this.editTest().parts)
+
   categories = linkedSignal(() => this.store.categoriesEntities().filter(f => !this.editTest().parts.map(m => m.categoryId).includes(f.id)));
 
   selectedGroups = model<TreeNode[]>([]);
@@ -78,7 +80,7 @@ export class TestView {
     } else {
       this.editTest().groupTests = [];
     }
-
+    this.editTest().parts=this.parts();
     if (this.editTest().id == 0) {
       this.testService.post(this.editTest()).subscribe({
         next: (res) => {
@@ -142,8 +144,7 @@ export class TestView {
       inputValues: { categories: this.categories(), editPart: { testId: this.editTest().id, id: 0, count: 0, categoryId: 0 } as TestPart },
       data: {
         save: (part: TestPart) => {
-          this.editTest().parts.push(part);
-          this.store.updateTest(this.editTest());
+          this.parts.update(val => [...val.filter(f=>f.categoryId!==part.categoryId), part]);
           this.markDirty()
           return of(true);
         }

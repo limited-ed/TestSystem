@@ -1,13 +1,9 @@
 import { Routes } from '@angular/router';
 import { canActivateAdmin, canActivateUser } from 'core';
-import { canActivateMain } from 'core/activators/activators';
 import { canActivateTest } from 'core/activators/test-activator';
-import { PreventBackButton } from 'core/guards/prevent-back-button.guard';
-import { UserDashboard } from 'user/user-dashboard/user-dashboard';
 
 export const routes: Routes = [
-    { path: "", redirectTo: 'main', pathMatch: 'full' },
-    { path: "main", loadComponent: () => import('main/main').then(c => c.Main), canActivate: [canActivateMain], data: { reuse: true } },
+    { path: "", loadComponent: () => import('main/main').then(c => c.Main), data: { reuse: true }, pathMatch:'full' },
     { path: "login", loadComponent: () => import('login/login').then(c => c.Login), data: { reuse: true } },
     {
         path: "admin", canActivate: [canActivateAdmin], loadComponent: () => import('admin/dashboard/admin-dashboard/admin-dashboard').then(c => c.AdminDashboard), data: { reuse: true }, children: [

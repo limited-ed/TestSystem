@@ -23,7 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\Api.DataContext\Api.DataContext.csproj" />
+    <ProjectReference Include="..\Api.PostgreSQL\Api.PostgreSQL.csproj" />
+    <ProjectReference Include="..\Api.SQLite\Api.SQLite.csproj" />
   </ItemGroup>
 
 </Project>

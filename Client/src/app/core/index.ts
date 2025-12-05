@@ -1,4 +1,3 @@
-export * from './activators/activators';
 export * from './activators/admin-activator';
 export * from './activators/test-activator';
 export * from './activators/user-activator';

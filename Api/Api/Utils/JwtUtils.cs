@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 
 namespace Api.Authorization;
@@ -9,12 +10,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+
 public class JWTKey
 {
     public string ValidAudience { get; set; }
     public string ValidIssuer { get; set; }
     public string TokenExpiryTimeInHour { get; set; }
-    public string Secret { get; set; }
+    public string PrivateKey { get; set; }
+    public string PublicKey { get; set; }
+    
+    
 }
 
 public class JwtUtils
@@ -24,7 +29,7 @@ public class JwtUtils
     public JwtUtils(IOptions<JWTKey> jwtKey)
     {
         _jwtKey = jwtKey.Value;
-        if (string.IsNullOrEmpty(_jwtKey.Secret))
+        if (string.IsNullOrEmpty(_jwtKey.PrivateKey))
             throw new Exception("JWT secret not configured");
     }
 
@@ -32,12 +37,12 @@ public class JwtUtils
     {
         _jwtKey = jwtKey;
 
-        if (string.IsNullOrEmpty(_jwtKey.Secret))
+        if (string.IsNullOrEmpty(_jwtKey.PrivateKey))
             throw new Exception("JWT secret not configured");
     }
 
 
-    public string GenerateJwtToken(User user)
+    public (string token, string publicKey) GenerateJwtToken(User user)
     {
        
         var claims = new Dictionary<string, object>()
@@ -55,7 +60,7 @@ public class JwtUtils
         return GenerateJwtToken(claims);
     }
 
-    public string GenerateJwtToken(Dictionary<string, object> claims)
+    public (string token, string publicKey) GenerateJwtToken(Dictionary<string, object> claims)
     {
         var identity = new ClaimsIdentity();
         foreach (var claim in claims)
@@ -63,10 +68,10 @@ public class JwtUtils
             identity.AddClaim(new Claim(claim.Key, claim.Value.ToString()));
         }
 
-        return GenerateJwtToken(identity, DateTime.UtcNow.AddDays(7));
+        return GenerateJwtToken(identity, DateTime.UtcNow.AddDays(1));
     }
     
-    public string GenerateJwtToken(Dictionary<string, object> claims, DateTime expires)
+    public (string token, string publicKey) GenerateJwtToken(Dictionary<string, object> claims, DateTime expires)
     {
         var identity = new ClaimsIdentity();
         foreach (var claim in claims)
@@ -77,12 +82,15 @@ public class JwtUtils
         return GenerateJwtToken(identity, expires);
     }
 
-    public string GenerateJwtToken(ClaimsIdentity identity, DateTime expires)
+    public (string token, string publicKey) GenerateJwtToken(ClaimsIdentity identity, DateTime expires)
     {
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_jwtKey.Secret!);
+        var rsa = RSA.Create(1024);
+        rsa.ImportFromPem(_jwtKey.PrivateKey);
 
+        var claims = identity.Claims.ToDictionary(t => t.Type, v => v.Value as object);
+        
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = identity,
@@ -90,18 +98,18 @@ public class JwtUtils
             Issuer = _jwtKey.ValidIssuer,
             Expires = expires,
             SigningCredentials =
-                new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-            Claims = identity.Claims.ToDictionary(t => t.Type, v => v.Value as object)
+                new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256),
+            Claims = claims
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
+        return (tokenHandler.WriteToken(token), _jwtKey.PublicKey);
     }
 
 
     public int ValidateJwtToken(string token)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_jwtKey.Secret!);
+        var key = Encoding.ASCII.GetBytes(_jwtKey.PrivateKey!);
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters

@@ -42,19 +42,7 @@ export class Login {
 
   login() {
     this.loginService.login(this.loginForm().value()).subscribe({
-      next: (result: any) => {
-        let decoded = jwtDecode(result.token)
-        this.applicationStore.updateIsLogin(true);
-        this.applicationStore.updateToken(result.token);
-        let user: UserInfo = {
-          login: decoded["unique_name"],
-          fullname: decoded["fullName"],
-          role: decoded["role"],
-          id: decoded["userId"],
-          canDelete: decoded["canDelete"],
-          group: decoded["group"]
-        }
-        this.applicationStore.updateUser(user);
+      next: (user: UserInfo) => {
         if (user.role === UserRoles.Administrator || user.role === UserRoles.Editor) {
           this.router.navigate(['/admin']);
         }
