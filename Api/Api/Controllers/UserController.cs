@@ -28,6 +28,7 @@ namespace Api.Controllers
         [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> PostUser(User user)
         {
+            
             try
             {
                 return Json(await userRepository.AddUserAsync(user));

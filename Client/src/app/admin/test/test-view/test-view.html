@@ -30,7 +30,7 @@
                         <p-button label="Добавить вопросы" icon="pi pi-plus" size="small" severity="secondary"
                             (onClick)="addCategory()"></p-button>
                     </div>
-                    <p-table [value]="editTest().parts" stripedRows class="h-[calc(100vh-370px)] overflow-auto"
+                    <p-table [value]="parts()" stripedRows class="h-[calc(100vh-370px)] overflow-auto"
                         [scrollable]="true" scrollHeight="100%" [size]="'small'">
 
                         <ng-template #body let-part>

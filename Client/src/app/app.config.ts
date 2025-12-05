@@ -16,6 +16,7 @@ import { UserStore } from 'state/user-store';
 import { ApiConfiguration, provideApiConfig } from 'app.config.api';
 
 import { ru } from 'primelocale/ru.json'
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
 
 
 const primeOptions = {
@@ -62,5 +63,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG(primeOptions),
     provideApiConfig(),
+    {provide: SsrCookieService, useClass: SsrCookieService}
   ]
 };

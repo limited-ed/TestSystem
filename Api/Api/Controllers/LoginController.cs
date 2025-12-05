@@ -32,7 +32,8 @@ public class LoginController(JwtUtils jwtUtils, UserRepository userRepository) :
         var user = await userRepository.GetUserAsync(userModel.Username.ToLower(), MD5Utils.CreateMD5( userModel.Password));
         if (user != null)
         {
-            return Json(new AuthenticateResponse { Token = jwtUtils.GenerateJwtToken(user) });
+            var jwt = jwtUtils.GenerateJwtToken(user); 
+            return Json(new AuthenticateResponse { Token = jwt.token, PublicKey = jwt.publicKey});
         }
         return Unauthorized();
     }

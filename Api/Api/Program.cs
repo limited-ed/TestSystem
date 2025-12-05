@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,6 +8,7 @@ using Api.Data;
 using Api.Middleware;
 using Api.Middleware.ReverseProxyApplication;
 using Api.Repositories;
+using Api.SeedData;
 using Api.Spa;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -19,12 +21,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 var configuration = builder.Configuration;
 
-var connection = configuration.GetSection("Data:ConnectionString").Value;
-var connectionpg = builder.Configuration.GetSection("Data:PostgreSQL").Value;
+var provider = configuration.GetSection("Data:Provider").Value;
+var connectionString = configuration.GetSection($"Data:{provider}").Value;
 
-builder.Services.AddDbContext<DataContext>(options => options.UseNpgsql(connectionpg));
-//builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connection));
 
+builder.Services.AddDbContext<DataContext>(options => _ = provider switch
+{
+    "SQLite" => options.UseSqlite(connectionString, o => o.MigrationsAssembly("Api.SQLite")),
+    
+    "PostgreSQL" => options.UseNpgsql(connectionString, o => o.MigrationsAssembly("Api.PostgreSQL")),
+    
+    _ => throw new Exception($"Unsupported provider: {provider}")
+});
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
     o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
@@ -33,30 +41,44 @@ builder.Services.AddControllers().AddJsonOptions(o =>
     o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     o.JsonSerializerOptions.WriteIndented = true;
     o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+}).ConfigureApiBehaviorOptions(o =>
+{
+    o.SuppressModelStateInvalidFilter = true;
 });
+var publicKey = System.IO.File.ReadAllText("public.pem");
+var rsa = RSA.Create(1024);
+rsa.ImportFromPem(publicKey);
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(
-    options =>
+}).AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
     {
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ValidAudience = builder.Configuration["JWTKey:ValidAudience"],
-            ValidIssuer = builder.Configuration["JWTKey:ValidIssuer"],
-            ClockSkew = TimeSpan.Zero,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTKey:Secret"]))
-        };
-    });
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidAudience = builder.Configuration["JWTKey:ValidAudience"],
+        ValidIssuer = builder.Configuration["JWTKey:ValidIssuer"],
+        ClockSkew = TimeSpan.Zero,
+        IssuerSigningKey = new RsaSecurityKey(rsa),
+    };
+});
 builder.Services.AddTransient<JwtUtils>();
-builder.Services.Configure<JWTKey>(builder.Configuration.GetSection("JWTKey"));
+builder.Services.Configure<JWTKey>(options =>
+    {
+        var conf = builder.Configuration.GetSection("JWTKey").Get<JWTKey>();
+        options.TokenExpiryTimeInHour = conf.TokenExpiryTimeInHour;
+        options.ValidAudience = conf.ValidAudience;
+        options.ValidIssuer = conf.ValidIssuer;
+        options.PrivateKey = System.IO.File.ReadAllText("private.pem");
+        options.PublicKey = publicKey;
+    }
+);
 builder.Services.AddAuthorization(options => { });
 builder.Services.AddRepositories();
 builder.Services.AddReverseProxyOpyions(options =>
@@ -75,13 +97,12 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<DataContext>();
     context.Database.Migrate();
 
-    await context.Seed();
+    await context.SeedData();
 }
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-
 }
 
 app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

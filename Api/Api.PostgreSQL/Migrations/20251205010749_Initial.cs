@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Api.Migrations
+namespace Api.Postgres.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -18,7 +18,7 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: false),
                     ParentId = table.Column<int>(type: "integer", nullable: false),
                     CanDelete = table.Column<bool>(type: "boolean", nullable: false)
                 },
@@ -33,7 +33,7 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Filename = table.Column<string>(type: "text", nullable: true)
+                    Filename = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +46,7 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -66,9 +66,9 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Login = table.Column<string>(type: "text", nullable: true),
-                    Password = table.Column<string>(type: "text", nullable: true),
-                    Fullname = table.Column<string>(type: "text", nullable: true),
+                    Login = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Fullname = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
                     GroupId = table.Column<int>(type: "integer", nullable: false),
                     CanDelete = table.Column<bool>(type: "boolean", nullable: false)
@@ -89,7 +89,7 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Content = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: false),
                     CategoryId = table.Column<int>(type: "integer", nullable: false),
                     ImageId = table.Column<int>(type: "integer", nullable: true)
                 },
@@ -115,7 +115,7 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Title = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: false),
                     Timer = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -136,7 +136,7 @@ namespace Api.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Content = table.Column<string>(type: "text", nullable: true),
+                    Content = table.Column<string>(type: "text", nullable: false),
                     IsRight = table.Column<bool>(type: "boolean", nullable: false),
                     QuestionId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -241,7 +241,7 @@ namespace Api.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     QuestionId = table.Column<int>(type: "integer", nullable: false),
                     TestResultId = table.Column<int>(type: "integer", nullable: false),
-                    Answers = table.Column<int[]>(type: "integer[]", nullable: true),
+                    Answers = table.Column<int[]>(type: "integer[]", nullable: false),
                     Right = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>

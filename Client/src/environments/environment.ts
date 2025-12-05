@@ -1,4 +1,4 @@
 export const environment = {
-    apiServer: 'http://api-server:8080',
+    apiServer: 'http://localhost:5193',
     mode: "production"
 };
