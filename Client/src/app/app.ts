@@ -11,13 +11,5 @@ import { ApplicationStore } from 'state/application-store';
 })
 export class App {
   protected readonly title = signal('Client');
-  router = inject (Router);
-
-
-
-  constructor(private store: ApplicationStore) {
-
-
-  }
 
 }

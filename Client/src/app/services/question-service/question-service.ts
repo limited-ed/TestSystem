@@ -20,10 +20,16 @@ export class QuestionService {
   public post(item: Question): Observable<Question> {
     return this.http.post(this.conf.apiHost + this.conf.apiEndpoints['questions'], item) as Observable<Question>;
   }
+
+  public postMany(items: Question[], id: number): Observable<Question[]> {
+    return this.http.post(this.conf.apiHost + this.conf.apiEndpoints['questions'] + id, items) as Observable<Question[]>;
+  }
+
   public put(item: Question): Observable<Question> {
     return this.http.put(this.conf.apiHost + this.conf.apiEndpoints['questions'] + item.id, item) as Observable<Question>;
   }
   public delete(id: number): Observable<never> {
     return this.http.delete(this.conf.apiHost + this.conf.apiEndpoints['questions'] + id) as Observable<never>;
   }
+
 }

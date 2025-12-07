@@ -29,16 +29,15 @@ public class JwtUtils
     public JwtUtils(IOptions<JWTKey> jwtKey)
     {
         _jwtKey = jwtKey.Value;
-        if (string.IsNullOrEmpty(_jwtKey.PrivateKey))
-            throw new Exception("JWT secret not configured");
+        if (string.IsNullOrEmpty(_jwtKey.PrivateKey) || string.IsNullOrEmpty(_jwtKey.PublicKey) )
+            throw new Exception("JWT public or private key not configured");
     }
 
     public JwtUtils(JWTKey jwtKey)
     {
         _jwtKey = jwtKey;
-
-        if (string.IsNullOrEmpty(_jwtKey.PrivateKey))
-            throw new Exception("JWT secret not configured");
+        if (string.IsNullOrEmpty(_jwtKey.PrivateKey) || string.IsNullOrEmpty(_jwtKey.PublicKey) )
+            throw new Exception("JWT public or private key not configured");
     }
 
 
@@ -87,7 +86,8 @@ public class JwtUtils
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();
         var rsa = RSA.Create(1024);
-        rsa.ImportFromPem(_jwtKey.PrivateKey);
+        var privateKey=File.ReadAllText(_jwtKey.PrivateKey);
+        rsa.ImportFromPem(privateKey);
 
         var claims = identity.Claims.ToDictionary(t => t.Type, v => v.Value as object);
         

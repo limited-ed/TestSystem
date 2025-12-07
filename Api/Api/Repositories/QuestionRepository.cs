@@ -43,6 +43,14 @@ public class QuestionRepository(DataContext context)
         return question;
     }
 
+    public async Task<List<Question>> AddQuestion(List<Question> questions, int categoryId)
+    {
+        questions.ForEach(f=>f.CategoryId = categoryId);
+        context.AddRange(questions);
+        await context.SaveChangesAsync();
+        return questions;
+    }    
+    
     public async Task UpdateQuestion(Question model)
     {
         var existingQuestion =

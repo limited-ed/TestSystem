@@ -6,17 +6,21 @@
         <p-select [options]="store.categoriesEntities()" optionLabel="title" optionValue="id" class="w-100"
             [(ngModel)]="selectedCategory" />
     </div>
-    <div class="flex py-2 border-b border-b-primary-600">
-        <p-button label="Добавить" icon="pi pi-plus" (click)="newQuestion()" size="small" [disabled]="!selectedCategory()"></p-button>
+    <div class="flex py-2 border-b border-b-primary-600 gap-4">
+        <p-button label="Добавить" icon="pi pi-plus" (click)="newQuestion()" size="small"
+            [disabled]="!selectedCategory()"></p-button>
+        <p-button label="Загрузить из файла" icon="pi pi-download"  [outlined]="true" severity="secondary" (click)="importFromFile()" size="small"
+            [disabled]="!selectedCategory()"></p-button>
     </div>
     <div class="pt-2 h-[calc(100%-104px)] ">
-        <p-table [value]="questions()" stripedRows class="h-full overflow-auto" [scrollable]="true"
-            scrollHeight="100%" [size]="'small'">
+        <p-table [value]="questions()" stripedRows class="h-full overflow-auto" [scrollable]="true" scrollHeight="100%"
+            [size]="'small'">
 
             <ng-template #body let-question>
                 <tr>
                     <td>
-                        <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" (click)="menuClick($event, question)"/>
+                        <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
+                            (click)="menuClick($event, question)" />
                     </td>
                     <td class="q-row">
                         {{ question.content | removeTags}}

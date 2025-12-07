@@ -43,6 +43,27 @@ namespace Api.Controllers
             }
         }
 
+        [HttpPost("{id:int}")]
+        public async Task<IActionResult> Post(int id, List<Question> questions)
+        {
+            var userId = ClaimUtils.GetClaimAsInt(User.Claims, "userId");
+            var cats = await categoriesRepository.GetForUser(userId);
+            if (!cats.Any(a => a.Id == id))
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                var results = await repository.AddQuestion(questions, id);
+                return Json(results);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Put(int id, Question question)
         {

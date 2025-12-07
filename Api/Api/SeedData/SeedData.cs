@@ -23,16 +23,16 @@ public static class SeedDataEx
             context.Users.Add(new()
             {
                 Id = 1, CanDelete = false, Fullname = "Administrator", Login = "admin",
-                Password = MD5Utils.CreateMD5("1"), Role = UserRole.Administrator, GroupId = 1
+                Password = MD5Utils.CreateMD5("Q0OJ960MYvab3xG6"), Role = UserRole.Administrator, GroupId = 1
             });
             context.Users.Add(new()
             {
-                Id = 2, CanDelete = false, Fullname = "Editor", Login = "editor", Password = MD5Utils.CreateMD5("1"),
+                Id = 2, CanDelete = false, Fullname = "Editor", Login = "editor", Password = MD5Utils.CreateMD5("J7ex3bs3"),
                 Role = UserRole.Editor, GroupId = 2
             });
             context.Users.Add(new()
             {
-                Id = 3, CanDelete = false, Fullname = "User", Login = "user", Password = MD5Utils.CreateMD5("1"),
+                Id = 3, CanDelete = false, Fullname = "User", Login = "user", Password = MD5Utils.CreateMD5("J7ex3bs3"),
                 Role = UserRole.User, GroupId = 2
             });
             await context.SaveChangesAsync();
@@ -44,38 +44,5 @@ public static class SeedDataEx
             await context.SaveChangesAsync();
         }
 
-        if (!context.Questions.Any())
-        {
-            string jsonString = File.ReadAllText("/app/testfile.json");
-            var options = new JsonSerializerOptions()
-            {
-                TypeInfoResolver = new DefaultJsonTypeInfoResolver(),
-                ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
-                PropertyNameCaseInsensitive = true,
-                WriteIndented = true
-            };
-            var data = JsonSerializer.Deserialize<Question[]>(jsonString, options);
-            context.Questions.AddRange(data);
-
-            await context.SaveChangesAsync();
-        }
-/*
-        if (!Tests.Any())
-        {
-            Tests.Add(new()
-            {
-                UserId = 1,
-                Title = "Тест для проверки",
-                Timer = 15,
-                Parts = new()
-                {
-                    new() { CategoryId = 1, Count = 5 },
-                }
-            });
-            await SaveChangesAsync();
-        } */
     }
 }

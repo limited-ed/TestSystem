@@ -10,6 +10,7 @@ using Api.Middleware.ReverseProxyApplication;
 using Api.Repositories;
 using Api.SeedData;
 using Api.Spa;
+using Api.Utils;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,14 +24,10 @@ var configuration = builder.Configuration;
 
 var provider = configuration.GetSection("Data:Provider").Value;
 var connectionString = configuration.GetSection($"Data:{provider}").Value;
-
-
 builder.Services.AddDbContext<DataContext>(options => _ = provider switch
 {
     "SQLite" => options.UseSqlite(connectionString, o => o.MigrationsAssembly("Api.SQLite")),
-    
     "PostgreSQL" => options.UseNpgsql(connectionString, o => o.MigrationsAssembly("Api.PostgreSQL")),
-    
     _ => throw new Exception($"Unsupported provider: {provider}")
 });
 builder.Services.AddControllers().AddJsonOptions(o =>
@@ -45,7 +42,13 @@ builder.Services.AddControllers().AddJsonOptions(o =>
 {
     o.SuppressModelStateInvalidFilter = true;
 });
-var publicKey = System.IO.File.ReadAllText("public.pem");
+
+var publicKeyFilename = configuration.GetSection("JWTKey:PublicKey").Value;
+if (string.IsNullOrWhiteSpace(publicKeyFilename))
+{
+    throw new Exception($"Missing JWTKey:PublicKey in appsettings.json");
+}
+var publicKey = System.IO.File.ReadAllText(publicKeyFilename);
 var rsa = RSA.Create(1024);
 rsa.ImportFromPem(publicKey);
 
@@ -75,14 +78,16 @@ builder.Services.Configure<JWTKey>(options =>
         options.TokenExpiryTimeInHour = conf.TokenExpiryTimeInHour;
         options.ValidAudience = conf.ValidAudience;
         options.ValidIssuer = conf.ValidIssuer;
-        options.PrivateKey = System.IO.File.ReadAllText("private.pem");
-        options.PublicKey = publicKey;
+        options.PrivateKey = conf.PrivateKey;
+        options.PublicKey = conf.PublicKey;
     }
 );
 builder.Services.AddAuthorization(options => { });
 builder.Services.AddRepositories();
 builder.Services.AddHostedService<NodeBackgroundService>();
-
+var corsPolicies = builder.Configuration.GetSection("Cors").Get<List<CorsPolicy>>();
+builder.Services.AddCorsFromSettings(corsPolicies);
+    
 var app = builder.Build();
 
 
@@ -101,12 +106,12 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyHeader());
+app.UseCorsFromSettings();
 
 //app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.UseReverseProxy();
+//app.UseReverseProxy();
 app.MapControllers();
 
 

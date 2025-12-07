@@ -3,5 +3,5 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 54px;
+    min-height: 3.375rem;
 }

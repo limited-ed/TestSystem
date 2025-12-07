@@ -23,7 +23,7 @@ public class JWTTest
         
         var jwt = new JwtUtils(options);
 
-        var token = jwt.GenerateJwtToken(user);
+        var (token, publicKey) = jwt.GenerateJwtToken(user);
 
         
         Assert.NotEmpty(token);

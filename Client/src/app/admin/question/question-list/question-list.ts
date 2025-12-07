@@ -13,9 +13,10 @@ import { ConfirmationService, MenuItem } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { QuestionEdit } from '../question-edit/question-edit';
 import { QuestionService } from 'services/question-service/question-service';
-import { map, Observable, throwError } from 'rxjs';
+import { map, Observable, of, tap, throwError } from 'rxjs';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { RemoveTagsPipe } from 'core';
+import { QuestionImport } from '../question-import/question-import';
 
 
 @Component({
@@ -154,6 +155,26 @@ export class QuestionList {
         })
       )
     }
+  }
+
+  importFromFile(){
+        this.ref = this.dialogService.open(QuestionImport, {
+      header: 'Загрузка из файла',
+      data: {
+        saveData: (questions: Question[])=> {
+          return this.service.postMany(questions, this.selectedCategory()!).pipe(
+            tap({ next: (result)=>this.store.updateAllQuestions([...this.store.questionsEntities(), ...result])}),
+            map( m=> true));
+        }
+      },
+      width: '75vw',
+      modal: true,
+      closable: true,
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
+    });
   }
 }
 

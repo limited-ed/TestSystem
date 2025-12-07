@@ -7,7 +7,6 @@ import { ApplicationStore } from 'state/application-store';
 export const canActivateAdmin: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): GuardResult => {
     const router = inject(Router);
     const store = inject(ApplicationStore);
-    console.log("in GUARD guard")
     if (store.isLogged()) {
         let roles = [UserRoles.Administrator, UserRoles.Editor];
         let role = store.user()?.role;

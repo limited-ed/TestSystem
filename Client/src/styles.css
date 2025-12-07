@@ -295,7 +295,3 @@ html * {
         radial-gradient(ellipse 100% 80% at 50% 100%, #000 50%, transparent 90%);
     mask-composite: intersect;
 }
-
-.p-datatable-table-container {
-    height: calc(100% - 110px) !important;
-}
