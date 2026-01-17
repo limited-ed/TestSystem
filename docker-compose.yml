@@ -1,0 +1,47 @@
+services:
+  api-server:
+    container_name: 'api-server'
+    image: 'api-server'
+    build:
+      context: .
+      dockerfile: Api/dockerfile
+    ports:
+     - "8080:8080"
+    depends_on:
+     - "postgres"
+    volumes:
+     - /var/app/keys:/app/keys
+     - /var/app/appsetings.json:/app/appseting.json
+    networks:
+      - lms-network
+
+  client:
+    container_name: 'api-client'
+    image: 'client'
+    build:
+      context: .
+      dockerfile: client/dockerfile
+    ports:
+     - "4000:4000"
+    depends_on:
+     - 'api-server'
+    networks:
+      - lms-network
+                
+  postgres:
+    container_name: 'db-postgres'
+    image: postgres:17.7
+    environment:
+      # change this for a "real" app!
+      POSTGRES_PASSWORD: 1
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - lms-network
+
+networks:
+  lms-network:
+    driver: bridge
+
+volumes:
+  pgdata: 

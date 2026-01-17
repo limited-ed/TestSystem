@@ -1,0 +1,12 @@
+<div class="grid grid-cols-[150px_auto] items-center">
+    <label for="username">Название группы</label>
+    <input pInputText id="username" [field]="editForm.title" />
+</div>
+<div class="flex justify-end items-end grow-1 mt-6">
+
+    <p-button label="Сохранить" severity="secondary" size="small" (click)="ok()" [loading]="isSaving()" [disabled]="editForm.title().value()===''" />
+    <span class="w-2"></span>
+    <p-button label="Отмена" severity="danger" size="small" (click)="cancel()" [disabled]="isSaving()"
+        variant="outlined" />
+
+</div>

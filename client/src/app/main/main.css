@@ -1,0 +1,55 @@
+        .kortex-primary {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            color: white;
+        }
+        
+        .kortex-primary:hover {
+            background: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.15);
+        }
+        
+        .kortex-secondary {
+            background: #F8FAFC;
+            color: #4F46E5;
+            border: 2px solid #E2E8F0;
+        }
+        
+        .kortex-secondary:hover {
+            background: #F1F5F9;
+            border-color: #4F46E5;
+            transform: translateY(-2px);
+        }
+        
+        .brain-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .light-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid #F1F5F9;
+        }
+        
+        .accent-border {
+            border-left: 4px solid #4F46E5;
+        }
+        
+        .bg-pattern {
+            background-color: #ffffff;
+            background-image: radial-gradient(#E2E8F0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }

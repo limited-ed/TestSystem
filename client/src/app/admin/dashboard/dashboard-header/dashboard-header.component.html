@@ -1,0 +1,28 @@
+<div class="h-15  flex items-center justify-between px-4 border-b-2 border-primary-700 bg-white dark:bg-surface-900">
+    <div class="flex">
+        <p-button icon="pi pi-bars" [rounded]="true" variant="text" severity="secondary" (onClick)="hide()" />
+        <div class="px-4 flex items-center gap-3">
+            <img src="/logo.png" alt="Login Illustration"  class="rounded-4xl h-7" />
+        </div>
+    </div>
+    <div class="flex gap-4 items-center">
+
+        <div>
+
+            <theme-switcher></theme-switcher>
+        </div>
+
+
+
+        <p-splitbutton text severity="secondary" [model]="avatarItems">
+            <ng-template #content>
+
+                <p-avatar image="/user.png" shape="circle" [style.height]="'auto'" />
+
+
+                <span>{{userInfo()?.fullname }}</span>
+            </ng-template>
+        </p-splitbutton>
+
+
+    </div>

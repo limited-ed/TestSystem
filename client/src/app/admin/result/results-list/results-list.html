@@ -1,0 +1,49 @@
+<p-menu #menu [model]="items" [popup]="true" />
+<div class="flex flex-col p-2 h-full">
+    <div class="flex w-full h-full overflow-auto">
+        <div class="w-[100%] h-[calc(100%)] overflow-auto">
+            <p-table [value]="results.value()??[]" scrollHeight="calc(100%)" size="small" [paginator]="true" [rows]="10"
+                [rowsPerPageOptions]="[10, 20, 30]" [stripedRows]="true" class="h-[calc(100%-10px)]">
+                <ng-template #caption>
+                    <div class="flex justify-between">
+                        <div class="flex items-center justify-items-end gap-4">
+                            <span>Период:</span>
+                            <p-datepicker dateFormat="dd.mm.yy" [showIcon]="true" selectionMode="range"
+                                [(ngModel)]="range" [showButtonBar]="true"></p-datepicker>
+                        </div>
+                        <p-iconfield iconPosition="right" class="w-80">
+                            <input pInputText type="text" pInputText placeholder="Поиск" class="w-80" />
+                            <p-inputicon class="pi pi-search" />
+
+                        </p-iconfield>
+                    </div>
+                </ng-template>
+                <ng-template #header>
+                    <tr>
+                        <th class="w-[72px]"></th>
+                        <th style="width: auto">ФИО</th>
+                        <th style="width: 15%">Группа</th>
+                        <th style="width: 15%">Дата</th>
+                        <th style="width: 20%">Тест</th>
+                        <th style="width: 15%">Всего/Верно</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-result>
+                    <tr>
+                        <td>
+                            <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true"
+                                (click)="menuClick($event, result)" />
+                        </td>
+                        <td>{{result.user.fullname}}</td>
+                        <td>{{result.user.group.title}}</td>
+                        <td>{{result.dateTime | date: 'dd.MM.yyyy HH:MM'}}</td>
+                        <td>{{ result.test.title }}</td>
+                        <td>{{result.total}} / {{result.right}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+
+</div>

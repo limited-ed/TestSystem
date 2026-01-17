@@ -1,0 +1,258 @@
+<div class="bg-gradient-to-b from-white to-blue-50 min-h-screen flex flex-col">
+    <div class="flex-grow">
+        <!-- Шапка -->
+        <header class="py-6 px-4 md:px-8">
+            <div class="max-w-7xl mx-auto flex justify-between items-center">
+                <!-- Новый логотип -->
+                <div class="flex items-center gap-3">
+                    <div class="relative">
+                        <div
+                            class="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-md">
+                            <!-- Новый логотип Kortex - абстрактный символ знаний -->
+                            <svg width="36" height="36" viewBox="0 0 40 40" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <!-- Основной элемент - стилизованная буква K -->
+                                <path d="M12 10H16V30H12V10Z" fill="white" />
+                                <path d="M16 10L28 22L16 34V10Z" fill="white" />
+                                <path d="M24 10L28 14L20 22L28 30L24 34L12 22L24 10Z" fill="url(#paint0_linear)"
+                                    fill-opacity="0.8" />
+                                <!-- Круг - символ знаний -->
+                                <circle cx="32" cy="8" r="4" fill="white" />
+                                <circle cx="32" cy="8" r="2" fill="#4F46E5" />
+
+                                <defs>
+                                    <linearGradient id="paint0_linear" x1="12" y1="22" x2="28" y2="22"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#A5B4FC" />
+                                        <stop offset="1" stop-color="#C4B5FD" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900 tracking-tight">KORTEX</h1>
+                        <p class="text-sm text-slate-500 font-medium">Knowledge Testing Platform</p>
+                    </div>
+                </div>
+
+                <!-- Кнопка входа -->
+                <a href="/login"
+                    class="group kortex-primary px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-sm flex items-center gap-2">
+                    <i class="fas fa-sign-in-alt group-hover:rotate-12 transition-transform"></i>
+                    Войти в систему
+                </a>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="px-4 py-12 md:py-20">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <!-- Левый столбец -->
+                    <div>
+                        <div
+                            class="inline-block px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 text-indigo-700 rounded-full mb-6 font-medium border border-indigo-100">
+                            <i class="fas fa-graduation-cap mr-2"></i> Профессиональная оценка знаний
+                        </div>
+
+                        <h1 class="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+                            Тестируйте знания<br>
+                            <span class="gradient-text">с Kortex</span>
+                        </h1>
+
+                        <div class="accent-border pl-4 mb-8">
+                            <p class="text-xl text-slate-600 leading-relaxed">
+                                Современная платформа для оценки компетенций, помогающая проводить тестирование
+                                с детальной аналитикой результатов.
+                            </p>
+                        </div>
+
+                        <!-- Основные кнопки -->
+                        <div class="flex flex-col sm:flex-row gap-4 mb-12">
+                            <a href="/login"
+                                class="group kortex-primary px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-sm inline-flex items-center justify-center gap-3">
+                                <i class="fas fa-rocket group-hover:rotate-12 transition-transform"></i>
+                                Начать тестирование
+                            </a>
+
+                        </div>
+
+                        <!-- Ключевые преимущества -->
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-50 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-bolt text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-slate-800">Быстрое создание тестов</div>
+                                    <div class="text-sm text-slate-500">Интуитивный конструктор вопросов</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-br from-green-100 to-green-50 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-chart-line text-green-600"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-slate-800">Детальная аналитика</div>
+                                    <div class="text-sm text-slate-500">Статистика и прогресс обучения</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-br from-purple-100 to-purple-50 rounded-xl flex items-center justify-center">
+                                    <i class="fas fa-shield-alt text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-slate-800">Безопасность данных</div>
+                                    <div class="text-sm text-slate-500">Защита конфиденциальной информации</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Правый столбец -->
+                    <div class="relative">
+                        <div class="brain-animation">
+                            <!-- Карточка предпросмотра -->
+                            <div class="light-card p-8 overflow-hidden">
+                                <!-- Декоративный элемент -->
+                                <div class="relative z-10">
+                                    <div class="text-center mb-6">
+                                        <!-- Новый логотип в миниатюре -->
+                                        <div
+                                            class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-md">
+                                            <svg width="72" height="72" fill="none" version="1.1" viewBox="0 0 40 40"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                <rect y="4.4409e-15" width="40" height="40" rx="5.3333" ry="5.3333"
+                                                    fill="url(#b)" stroke-width="1.1472" />
+                                                <path d="m12 10h4v20h-4v-20z" fill="#fff" />
+                                                <path d="M16 10L28 22L16 34V10Z" fill="#fff" />
+                                                <path d="m24 10 4 4-8 8 8 8-4 4-12-12 12-12z" fill="url(#a)"
+                                                    fill-opacity=".8" />
+                                                <circle cx="32" cy="8" r="4" fill="#fff" />
+                                                <circle cx="32" cy="8" r="2" fill="#4F46E5" />
+                                                <defs>
+                                                    <linearGradient id="a" x1="12" x2="28" y1="22" y2="22"
+                                                        gradientUnits="userSpaceOnUse">
+                                                        <stop stop-color="#A5B4FC" offset="0" />
+                                                        <stop stop-color="#C4B5FD" offset="1" />
+                                                    </linearGradient>
+                                                    <linearGradient id="b" x1="5.8579" x2="34.142" y1="5.8579"
+                                                        y2="34.142" gradientUnits="userSpaceOnUse">
+                                                        <stop stop-color="#4f46e5" offset="0" />
+                                                        <stop stop-color="#7c3aed" offset="1" />
+                                                    </linearGradient>
+                                                </defs>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-slate-800">Платформа оценки знаний</h3>
+                                    </div>
+
+                                    <!-- Предпросмотр теста -->
+                                    <div
+                                        class="bg-gradient-to-br from-slate-50 to-white rounded-xl p-6 border border-slate-100">
+                                        <div class="text-slate-700 mb-4">
+                                            <div class="flex justify-between items-center mb-2">
+                                                <span class="font-medium">Тест: Основы</span>
+                                                <span class="text-sm font-medium text-blue-600">75% завершено</span>
+                                            </div>
+                                            <div class="w-full bg-slate-200 rounded-full h-2 mb-6">
+                                                <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full"
+                                                    style="width: 75%"></div>
+                                            </div>
+
+                                            <div class="space-y-3">
+                                                <div
+                                                    class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                                    <div class="flex items-center gap-3">
+                                                        <div
+                                                            class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                                                            <i class="fas fa-check text-green-600"></i>
+                                                        </div>
+                                                        <span class="font-medium text-slate-700">Вопрос 1</span>
+                                                    </div>
+                                                    <span class="text-green-600 font-medium">Правильно</span>
+                                                </div>
+                                                <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                                                    <div class="flex items-center gap-3">
+                                                        <div
+                                                            class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                                                            <i class="fas fa-times text-red-600"></i>
+                                                        </div>
+                                                        <span class="font-medium text-slate-700">Вопрос 2</span>
+                                                    </div>
+                                                    <span class="text-red-600 font-medium">Неправильно</span>
+                                                </div>
+                                                <div
+                                                    class="flex items-center justify-between p-3 bg-blue-50 rounded-lg border-2 border-blue-200">
+                                                    <div class="flex items-center gap-3">
+                                                        <div
+                                                            class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                            <i class="fas fa-question text-blue-600"></i>
+                                                        </div>
+                                                        <span class="font-medium text-slate-700">Вопрос 3</span>
+                                                    </div>
+                                                    <span class="text-blue-600 font-medium">В процессе</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-6 pt-6 border-t border-slate-200">
+                                            <a href="#"
+                                                class="block w-full text-center kortex-primary py-3 rounded-lg font-medium transition-all duration-300 shadow-sm">
+                                                Продолжить тестирование
+                                                <i class="fas fa-arrow-right ml-2"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Подвал -->
+    <footer class="py-8 px-4 border-t border-slate-200 bg-white mt-12">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <!-- Авторские права -->
+                <div class="text-slate-600 mb-4 md:mb-0">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 5H9V15H5V5Z" fill="white" />
+                                <path d="M9 5L15 11L9 17V5Z" fill="white" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-bold text-slate-900">KORTEX PLATFORM</div>
+                            <div class="text-sm text-slate-500">© 2025 • Лицензия MIT</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ссылки -->
+                <div class="flex items-center gap-6">
+
+                </div>
+            </div>
+
+            <!-- Разделительная линия -->
+            <div class="mt-8 pt-8 border-t border-slate-100 text-center">
+                <div class="text-sm text-slate-500">
+                    Kortex v1.0-rc1 • Платформа для тестирования знаний •
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>

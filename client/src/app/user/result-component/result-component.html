@@ -1,0 +1,38 @@
+<div class="h-[100vh] flex flex-col relative">
+
+    <div class="h-15 grid grid-cols-2 p-4 border-b-2 border-primary-700">
+        <div class="">
+            <h1 class="text-2xl font-bold"><span class="text-primary-700">Silk</span>TEST</h1>
+        </div>
+        <div class="flex justify-end items-center text-lg gap-4">
+            <p-avatar image="/user.png" shape="circle" [style.height]="'auto'" />
+            <span class="block">
+                {{appStore.user()?.fullname}}
+            </span>
+            <!--             <div>
+                    <p-button icon="pi pi-sign-out"  [text]="true" severity="danger" label="Выход" />
+                </div> -->
+        </div>
+    </div>
+        <div class="absolute inset-0 z-0 back-sq "></div>
+    <div class=" grow-1 grid justify-items-center items-center">
+
+        <div class="border-1 border-primary-500 rounded-2xl py-8 w-1/2 flex flex-col items-center gap-4 grow-1 z-10 bg-white dark:bg-surface-800">
+            <h1 class="text-4xl font-bold pb-10">
+                Тестирование завершено
+            </h1>
+            <h2 class="text-xl">
+                Ваш результат:
+            </h2>
+            <div>
+                Всего вопросов: {{userStore.testResult().total}}
+            </div>
+            <div>
+                Отвечено верно: {{userStore.testResult().right}}
+            </div>
+            <p-button label="Закрыть и выйти" class="pt-10" [outlined]="true" (click)="closeAndExit()"/>
+        </div>
+    </div>
+
+</div>
+

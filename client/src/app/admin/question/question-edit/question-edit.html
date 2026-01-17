@@ -1,0 +1,63 @@
+<p-confirmdialog />
+<div class="flex flex-col gap-2 pt-2">
+    <div class="h-60">
+        <p-editor [(ngModel)]="editQuestion().content" class="h-50">
+            <ng-template #header>
+                <span class="ql-formats">
+                    <button class="ql-bold" aria-label="Bold" type="button"></button>
+                    <button class="ql-italic" aria-label="Italic" type="button"></button>
+                    <button class="ql-underline" aria-label="Underline" type="button"></button>
+                </span>
+                <span class="ql-formats">
+                    <select class="ql-color"></select>
+                    <select class="ql-background"></select>
+                </span>
+                <span class="ql-formats">
+                    <button class="ql-list" value="ordered" aria-label="Ordered List" type="button"></button>
+                    <button class="ql-list" value="bullet" aria-label="Unordered List" type="button"></button>
+                    <select class="ql-align">
+                        <option selected></option>
+                        <option value="center">center</option>
+                        <option value="right">right</option>
+                        <option value="justify">justify</option>
+                    </select>
+                </span>
+
+            </ng-template>
+        </p-editor>
+    </div>
+    <p-tabs [(value)]="tab" scrollable>
+        <p-tablist scrollable>
+            @for(answer of editQuestion().answers; track answer.innerId ;let i = $index)
+            {
+            <p-tab [value]="answer.innerId" class="!pb-2">
+                Ответ {{ i + 1 }}
+                <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger" size="small" (click)="deleteAnswer(answer.id)" />
+            </p-tab>
+            }
+            <p-tab [value]="0"><span class="pi pi-plus"></span></p-tab>
+        </p-tablist>
+        <p-tabpanels class="h-50">
+            @for(answer of editQuestion().answers; track answer.innerId ;let i = $index)
+            {
+            <p-tabpanel [value]="answer.innerId">
+                <textarea rows="5" cols="30" pTextarea [(ngModel)]="answer.content" fluid></textarea>
+                <div>
+                    <p-checkbox [(ngModel)]="answer.isRight" [binary]="true" size="large"
+                        [inputId]="'isRight'+$index" />
+                    <label [for]="'isRight'+$index" class="ml-2"> Верный ответ </label>
+                </div>
+
+            </p-tabpanel>
+            }
+
+        </p-tabpanels>
+    </p-tabs>
+    <div class="flex justify-end items-end grow-1">
+
+        <p-button label="Сохранить" severity="secondary" size="small" (click)="ok()" [loading]="isSaving()"/>
+        <span class="w-2"></span>
+        <p-button label="Отмена" severity="danger" size="small" (click)="cancel()" [disabled]="isSaving()" variant="outlined"/>
+
+    </div>
+</div>

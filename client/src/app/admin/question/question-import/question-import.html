@@ -1,0 +1,33 @@
+<div class="flex flex-col gap-2 pt-2">
+    <form>
+        <label class="block">
+            <span class="sr-only">Choose profile photo</span>
+            <input type="file" #file
+                class="block w-full text-sm text-gray-500 file:me-4 file:py-2 file:px-4 file:rounded-lg file:border-0
+                       file:text-sm file:font-semibold file:bg-primary-600 file:text-white hover:file:bg-primary-700
+                       file:disabled:opacity-50 file:disabled:pointer-events-none dark:text-neutral-500 dark:file:bg-blue-500 dark:hover:file:bg-blue-400" 
+                       (change)="change($event)" />
+        </label>
+    </form>
+    <div>
+        <p-table [value]="questions()" stripedRows class="h-150 overflow-auto" [scrollable]="true" scrollHeight="100%"
+            [size]="'small'">
+
+            <ng-template #body let-question>
+                <tr>
+                    <td class="q-row">
+                        {{ question.content | removeTags}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="flex justify-end items-end grow-1">
+
+        <p-button label="Сохранить" severity="secondary" size="small" (click)="ok()" [loading]="isSaving()" />
+        <span class="w-2"></span>
+        <p-button label="Отмена" severity="danger" size="small" (click)="cancel()" [disabled]="isSaving()"
+            variant="outlined" />
+
+    </div>
+</div>

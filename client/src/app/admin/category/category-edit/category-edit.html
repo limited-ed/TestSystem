@@ -1,0 +1,13 @@
+<form>
+    <div class="grid grid-cols-[1fr_3fr] grid-rows-2 items-center gap-4">
+        <label for="username">Название</label>
+        <input pInputText id="username" [field]="categoryForm.title"/>
+    </div>
+</form>
+<div class="flex justify-end">
+
+    <p-button label="Сохранить" severity="success" size="small" (click)="ok()" [loading]="isSaving()"/>
+    <span class="w-2"></span>
+    <p-button label="Отмена" severity="danger" size="small" (click)="cancel()" [disabled]="isSaving()"/>
+
+</div>
